@@ -1,0 +1,1813 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Problem Solving & Decision Making - Digital Leadership Program</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Google Fonts: Plus Jakarta Sans & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  
+  <!-- Google Material Symbols Outlined (Official Google Icon Pack) -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+
+  <!-- Canvas Confetti CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+          colors: {
+            // SPIKE ASCENT PALETTE
+            spike: {
+              black: '#1A1A1A',
+              crimson: '#E01A4F',
+              'crimson-light': '#FDF2F4',
+              'crimson-border': '#F8B4C4',
+              'crimson-dark': '#B80D3B',
+              blue: '#4C8DF1',
+              'blue-light': '#EEF4FE',
+              'blue-border': '#BFD7FB',
+              'blue-dark': '#296FE3',
+              gray: '#F2F2F2',
+              'gray-dark': '#E5E5E5',
+              surface: '#F8F9FA'
+            }
+          },
+          borderRadius: {
+            'pill': '100px',
+            'capsule': '9999px'
+          },
+          boxShadow: {
+            'soft': '0 4px 20px -2px rgba(26, 26, 26, 0.06)',
+            'pill': '0 2px 10px rgba(0, 0, 0, 0.04)',
+            'glow-crimson': '0 0 20px rgba(224, 26, 79, 0.25)',
+            'glow-blue': '0 0 20px rgba(76, 141, 241, 0.25)'
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Google Material Symbols default alignment */
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 450, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    .material-symbols-outlined.fill {
+      font-variation-settings: 'FILL' 1, 'wght' 500, 'GRAD' 0, 'opsz' 24;
+    }
+
+    /* 3D Flip Card Styles */
+    .perspective-1000 { perspective: 1000px; }
+    .transform-style-3d { transform-style: preserve-3d; }
+    .backface-hidden { backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+    .rotate-y-180 { transform: rotateY(180deg); }
+
+    /* Custom Scrollbar */
+    .scrollbar-thin::-webkit-scrollbar { width: 5px; height: 5px; }
+    .scrollbar-thin::-webkit-scrollbar-thumb { background-color: #E5E5E5; border-radius: 9999px; }
+
+    /* Drag & Drop Animations */
+    .draggable-chip { cursor: grab; user-select: none; transition: transform 0.15s ease, box-shadow 0.15s ease; }
+    .draggable-chip:active { cursor: grabbing; transform: scale(1.05); }
+    .drop-target { transition: all 0.2s ease; }
+    .drop-target.drag-over { border-color: #4C8DF1; background-color: #EEF4FE; transform: scale(1.02); }
+
+    /* Spike Capsule Decorative Bars */
+    .capsule-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 9999px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+  </style>
+</head>
+<body class="bg-[#F8F9FA] text-[#1A1A1A] antialiased font-sans min-h-screen flex flex-col justify-between selection:bg-[#E01A4F] selection:text-white">
+
+  <!-- ================= TOP APP BAR (STICKY) ================= -->
+  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-[#E5E5E5] shadow-soft transition-all">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-2.5 flex items-center justify-between gap-3">
+      
+      <!-- Module & Program Identity -->
+      <div class="flex items-center gap-3">
+        <button onclick="toggleSidebar()" class="lg:hidden p-2 rounded-xl hover:bg-spike-gray text-spike-black focus:outline-none transition" title="Buka Daftar Unit">
+          <span class="material-symbols-outlined text-xl">menu</span>
+        </button>
+        
+        <!-- Spike Capsule Avatar Badge -->
+        <div class="h-9 w-9 rounded-2xl bg-spike-black flex items-center justify-center text-white font-extrabold text-sm shadow-md border border-white/20">
+          <span class="text-xs tracking-tighter font-mono text-white font-extrabold">DL</span>
+        </div>
+        
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="text-xs sm:text-sm font-extrabold text-spike-black tracking-tight leading-tight">
+              Problem Solving &amp; Decision Making
+            </h1>
+            <!-- Live SAP LMS Status Tag -->
+            <span id="lmsStatusTag" class="hidden sm:inline-flex items-center gap-1 text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-spike-gray text-[#1A1A1A]">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+              <span id="lmsStatusLabel">Standalone</span>
+            </span>
+          </div>
+          <p class="text-[11px] text-[#666666] flex items-center gap-1.5 font-medium">
+            <span>Digital Leadership Program</span>
+            <span>•</span>
+            <span id="headerUnitTag" class="text-spike-blue font-bold font-mono">Unit 0 / 10</span>
+          </p>
+        </div>
+      </div>
+
+      <!-- Center / Audio Player Bar -->
+      <div class="hidden sm:flex items-center gap-2.5 bg-spike-gray/80 border border-[#E5E5E5] px-3.5 py-1.5 rounded-full shadow-inner">
+        <button id="btnAudioToggle" onclick="toggleAudio()" class="w-7 h-7 rounded-full bg-spike-crimson hover:bg-spike-crimson-dark text-white flex items-center justify-center shadow-sm transition active:scale-95" title="Putar / Jeda Narasi Audio">
+          <span id="iconPlay" class="material-symbols-outlined text-base fill">play_arrow</span>
+          <span id="iconPause" class="material-symbols-outlined text-base fill hidden">pause</span>
+        </button>
+        <button onclick="replayAudio()" class="w-6 h-6 rounded-full hover:bg-[#E5E5E5] text-[#1A1A1A] flex items-center justify-center transition active:scale-95" title="Ulangi Audio dari Awal">
+          <span class="material-symbols-outlined text-sm">replay</span>
+        </button>
+        <div class="text-[11px] font-mono text-[#555555] flex items-center gap-1 font-semibold">
+          <span id="audioCurrentTime">00:00</span>
+          <span>/</span>
+          <span id="audioTotalDuration">00:00</span>
+        </div>
+        <div class="w-16 sm:w-24 bg-[#DDDDDD] h-1.5 rounded-full overflow-hidden cursor-pointer" onclick="seekAudio(event)" title="Geser Durasi Audio">
+          <div id="audioProgressBar" class="bg-spike-blue h-full w-0 transition-all duration-100"></div>
+        </div>
+      </div>
+
+      <!-- Right Progress & Timer Indicators -->
+      <div class="flex items-center gap-3 text-xs">
+        <div class="hidden md:flex flex-col items-end">
+          <span class="text-[10px] text-[#888888] font-bold uppercase tracking-wider">Progres Belajar</span>
+          <span id="progressText" class="font-extrabold text-spike-black font-mono">0% Selesai</span>
+        </div>
+        <!-- Gate Timer Badge -->
+        <div id="gateTimerBadge" class="flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-50 border border-amber-200 text-amber-900 text-xs font-mono font-bold shadow-sm">
+          <span class="material-symbols-outlined text-sm text-amber-600 animate-spin">timelapse</span>
+          <span id="gateTimerText">10s</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Live Linear Course Progress Bar (Gradient from Spike Blue to Spike Crimson) -->
+    <div class="w-full bg-[#E5E5E5] h-1">
+      <div id="linearCourseProgressBar" class="bg-gradient-to-r from-spike-blue to-spike-crimson h-full w-0 transition-all duration-300"></div>
+    </div>
+  </header>
+
+  <!-- ================= MAIN LAYOUT WITH SIDEBAR ================= -->
+  <div class="max-w-7xl mx-auto w-full px-4 sm:px-6 py-6 flex-1 flex gap-6">
+
+    <!-- SIDEBAR NAVIGATION DRAWER -->
+    <aside id="courseSidebar" class="fixed lg:static inset-y-0 left-0 z-30 w-72 bg-white rounded-3xl border border-[#E5E5E5] shadow-soft p-4 flex flex-col justify-between transform -translate-x-full lg:translate-x-0 transition-transform duration-300 overflow-hidden">
+      <div>
+        <div class="flex items-center justify-between pb-3 border-b border-spike-gray mb-3">
+          <div class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-spike-blue text-lg">format_list_bulleted</span>
+            <span class="text-xs font-extrabold uppercase tracking-wider text-spike-black">Daftar 11 Unit</span>
+          </div>
+          <button onclick="toggleSidebar()" class="lg:hidden p-1 text-slate-400 hover:text-spike-black">
+            <span class="material-symbols-outlined text-lg">close</span>
+          </button>
+        </div>
+
+        <!-- Unit List -->
+        <nav id="unitNavList" class="space-y-1.5 max-h-[calc(100vh-230px)] overflow-y-auto scrollbar-thin pr-1">
+          <!-- Dynamically populated unit navigation items -->
+        </nav>
+      </div>
+
+      <!-- Sidebar Footer / SAP LMS Status Card -->
+      <div class="pt-3 border-t border-[#E5E5E5] text-[11px] space-y-1">
+        <div class="p-2.5 rounded-2xl bg-spike-gray border border-[#E5E5E5]">
+          <div class="flex items-center justify-between">
+            <span class="font-extrabold text-spike-black text-[10px] uppercase tracking-wide">SAP SuccessFactors</span>
+            <span id="sidebarLmsBadge" class="text-[9px] font-mono font-bold px-1.5 py-0.2 rounded bg-white text-spike-blue border border-[#E5E5E5]">SCORM 1.2</span>
+          </div>
+          <span id="sidebarLmsUser" class="text-[10px] text-[#666666] block truncate mt-0.5 font-medium">User: Local Learner</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT VIEWPORT -->
+    <main class="flex-1 bg-white rounded-3xl border border-[#E5E5E5] shadow-soft p-6 sm:p-9 flex flex-col justify-between overflow-hidden">
+      
+      <!-- DYNAMIC UNIT CONTAINER -->
+      <div id="unitContentContainer">
+        <!-- Rendered unit dynamically -->
+      </div>
+
+      <!-- FOOTER NAVIGATION CONTROLS -->
+      <div class="pt-6 border-t border-[#E5E5E5] mt-8 flex flex-wrap items-center justify-between gap-3">
+        <button id="btnPrev" onclick="navigateUnit(-1)" class="px-4 py-2.5 rounded-full border border-[#D5D5D5] hover:bg-spike-gray text-xs font-bold text-spike-black flex items-center gap-1.5 transition active:scale-95">
+          <span class="material-symbols-outlined text-sm">arrow_back</span>
+          <span>Unit Sebelumnya</span>
+        </button>
+
+        <div class="text-center">
+          <span id="footerUnitCounter" class="text-xs font-mono font-bold text-[#777777]">Unit 0 dari 10</span>
+        </div>
+
+        <button id="btnNext" onclick="navigateUnit(1)" class="px-6 py-2.5 rounded-full bg-spike-blue hover:bg-spike-blue-dark disabled:opacity-40 disabled:cursor-not-allowed text-white text-xs font-extrabold flex items-center gap-2 shadow-md transition active:scale-95">
+          <span id="btnNextLabel">Lanjut ke Unit Berikutnya</span>
+          <span class="material-symbols-outlined text-sm">arrow_forward</span>
+        </button>
+      </div>
+
+    </main>
+
+  </div>
+
+  <!-- AUDIO ELEMENT (STATIC CONTAINER) -->
+  <audio id="courseAudio" preload="auto"></audio>
+
+  <!-- ================= JAVASCRIPT APP LOGIC ================= -->
+  <script>
+    // --- 1. SAP SUCCESSFACTORS LMS SCORM 1.2 / 2004 WRAPPER ---
+    const scorm = {
+      api: null,
+      isInitialized: false,
+      isScorm2004: false,
+      startTime: new Date(),
+      
+      findAPI(win) {
+        let attempts = 0;
+        let currentWin = win;
+        while (currentWin && !currentWin.API && !currentWin.API_1484_11 && attempts < 10) {
+          if (currentWin.parent && currentWin.parent !== currentWin) {
+            currentWin = currentWin.parent;
+          } else if (currentWin.opener) {
+            currentWin = currentWin.opener;
+          } else {
+            break;
+          }
+          attempts++;
+        }
+        return currentWin ? (currentWin.API || currentWin.API_1484_11 || null) : null;
+      },
+
+      init() {
+        this.api = this.findAPI(window);
+        if (this.api) {
+          this.isScorm2004 = !!window.API_1484_11 || (this.api.Initialize !== undefined);
+          const res = this.isScorm2004 ? this.api.Initialize("") : this.api.LMSInitialize("");
+          if (res === "true" || res === true) {
+            this.isInitialized = true;
+            console.log("[SAP LMS] Handshake SCORM Initialized successfully!");
+            
+            // Read learner name
+            const studentName = this.getValue(this.isScorm2004 ? "cmi.learner_name" : "cmi.core.student_name");
+            if (studentName) {
+              const uLabel = document.getElementById('sidebarLmsUser');
+              if (uLabel) uLabel.innerText = "Learner: " + studentName;
+            }
+
+            // Set initial status to incomplete
+            const curStatus = this.getValue(this.isScorm2004 ? "cmi.completion_status" : "cmi.core.lesson_status");
+            if (!curStatus || curStatus === "not attempted" || curStatus === "unknown") {
+              this.setValue(this.isScorm2004 ? "cmi.completion_status" : "cmi.core.lesson_status", "incomplete");
+              this.commit();
+            }
+
+            // Update UI tags
+            document.getElementById('lmsStatusLabel').innerText = "SAP Connected";
+            document.getElementById('sidebarLmsBadge').innerText = this.isScorm2004 ? "SCORM 2004" : "SCORM 1.2";
+          }
+        } else {
+          console.log("[SAP LMS] No LMS parent detected. Running in Standalone / Preview Mode.");
+        }
+      },
+
+      getValue(key) {
+        if (!this.isInitialized) return "";
+        return this.isScorm2004 ? this.api.GetValue(key) : this.api.LMSGetValue(key);
+      },
+
+      setValue(key, val) {
+        if (!this.isInitialized) return;
+        if (this.isScorm2004) {
+          this.api.SetValue(key, String(val));
+        } else {
+          this.api.LMSSetValue(key, String(val));
+        }
+      },
+
+      commit() {
+        if (!this.isInitialized) return;
+        if (this.isScorm2004) {
+          this.api.Commit("");
+        } else {
+          this.api.LMSCommit("");
+        }
+      },
+
+      saveProgress(unitId, score = null, passed = false) {
+        if (!this.isInitialized) return;
+        // Bookmark location
+        this.setValue(this.isScorm2004 ? "cmi.location" : "cmi.core.lesson_location", String(unitId));
+        
+        // Score if evaluated
+        if (score !== null) {
+          if (this.isScorm2004) {
+            this.setValue("cmi.score.raw", score);
+            this.setValue("cmi.score.min", 0);
+            this.setValue("cmi.score.max", 100);
+            this.setValue("cmi.score.scaled", score / 100);
+          } else {
+            this.setValue("cmi.core.score.raw", score);
+            this.setValue("cmi.core.score.min", "0");
+            this.setValue("cmi.core.score.max", "100");
+          }
+        }
+
+        // Completion / Success status
+        if (passed) {
+          if (this.isScorm2004) {
+            this.setValue("cmi.completion_status", "completed");
+            this.setValue("cmi.success_status", "passed");
+          } else {
+            this.setValue("cmi.core.lesson_status", "passed");
+          }
+        }
+        this.commit();
+      },
+
+      finish() {
+        if (!this.isInitialized) return;
+        // Compute session time in format HH:MM:SS
+        const now = new Date();
+        const diffSec = Math.floor((now - this.startTime) / 1000);
+        const h = String(Math.floor(diffSec / 3600)).padStart(2, '0');
+        const m = String(Math.floor((diffSec % 3600) / 60)).padStart(2, '0');
+        const s = String(diffSec % 60).padStart(2, '0');
+        const timeStr = `${h}:${m}:${s}`;
+
+        if (this.isScorm2004) {
+          this.setValue("cmi.session_time", `PT${h}H${m}M${s}S`);
+          this.api.Terminate("");
+        } else {
+          this.setValue("cmi.core.session_time", timeStr);
+          this.api.LMSFinish("");
+        }
+        this.isInitialized = false;
+      }
+    };
+
+    window.addEventListener('beforeunload', () => scorm.finish());
+    window.addEventListener('unload', () => scorm.finish());
+
+    // --- 2. AUDIO & SFX SYNTHESIZER (ZERO EXTERNAL DEPENDENCY) ---
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+    function playTone(type) {
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      const now = audioCtx.currentTime;
+
+      if (type === 'click') {
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(650, now);
+        osc.frequency.exponentialRampToValueAtTime(320, now + 0.04);
+        gain.gain.setValueAtTime(0.12, now);
+        gain.gain.linearRampToValueAtTime(0.001, now + 0.04);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start(now);
+        osc.stop(now + 0.04);
+      } else if (type === 'success') {
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(523.25, now);
+        osc.frequency.setValueAtTime(659.25, now + 0.08);
+        osc.frequency.setValueAtTime(783.99, now + 0.16);
+        gain.gain.setValueAtTime(0.18, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start(now);
+        osc.stop(now + 0.25);
+      } else if (type === 'error') {
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(190, now);
+        osc.frequency.linearRampToValueAtTime(130, now + 0.14);
+        gain.gain.setValueAtTime(0.18, now);
+        gain.gain.linearRampToValueAtTime(0.001, now + 0.14);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start(now);
+        osc.stop(now + 0.14);
+      } else if (type === 'fanfare') {
+        [523.25, 659.25, 783.99, 1046.50].forEach((f, idx) => {
+          const o = audioCtx.createOscillator();
+          const g = audioCtx.createGain();
+          o.type = 'triangle';
+          o.frequency.value = f;
+          g.gain.setValueAtTime(0.16, now + idx * 0.08);
+          g.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.08 + 0.4);
+          o.connect(g);
+          g.connect(audioCtx.destination);
+          o.start(now + idx * 0.08);
+          o.stop(now + idx * 0.08 + 0.4);
+        });
+      }
+    }
+
+    // --- 3. COURSE UNITS SPECIFICATION (11 UNITS) ---
+    const UNITS = [
+      {
+        id: 0,
+        title: "Cover & Orientasi Kepemimpinan",
+        badge: "Orientasi",
+        audioSrc: "audio/unit_00.mp3",
+        reqTask: false,
+        timerSec: 5,
+        render: () => `
+          <div class="space-y-6">
+            <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-spike-blue-light border border-spike-blue-border text-spike-blue font-extrabold text-xs">
+              <span class="w-2 h-2 rounded-full bg-spike-blue animate-pulse"></span>
+              <span>DIGITAL LEADERSHIP PROGRAM • SESI 6 &amp; 7</span>
+            </div>
+            
+            <h1 class="text-3xl sm:text-5xl font-extrabold text-spike-black tracking-tight leading-tight">
+              Problem Solving &amp; Decision Making
+            </h1>
+            
+            <p class="text-sm sm:text-base text-[#555555] leading-relaxed max-w-3xl">
+              <em>Navigasi Ketidakpastian: Dari Pemadam Kebakaran Menjadi Pemimpin Berbasis Data.</em> Saat beralih menjadi seorang leader, Anda bukan lagi sekadar memadamkan api masalah kecil sendirian. Tugas utama Anda adalah menuntun tim membedah akar masalah terdalam dan mengambil keputusan tangguh berbasis data.
+            </p>
+
+            <!-- 5 Steps Architecture Matrix (Spike Style Pill Cards) -->
+            <div class="grid grid-cols-1 sm:grid-cols-5 gap-3 pt-2">
+              <div class="p-3.5 bg-spike-gray rounded-2xl border border-[#E5E5E5] hover:border-spike-blue transition">
+                <span class="text-xs font-mono font-extrabold text-spike-blue block">01</span>
+                <span class="text-xs font-extrabold text-spike-black mt-1 block">Identifikasi Masalah</span>
+                <span class="text-[11px] text-[#666666]">Iceberg &amp; 5W2H</span>
+              </div>
+              <div class="p-3.5 bg-spike-gray rounded-2xl border border-[#E5E5E5] hover:border-spike-blue transition">
+                <span class="text-xs font-mono font-extrabold text-spike-blue block">02</span>
+                <span class="text-xs font-extrabold text-spike-black mt-1 block">Analisa Sebab</span>
+                <span class="text-[11px] text-[#666666]">Fishbone &amp; 5-Whys</span>
+              </div>
+              <div class="p-3.5 bg-spike-gray rounded-2xl border border-[#E5E5E5] hover:border-spike-crimson transition">
+                <span class="text-xs font-mono font-extrabold text-spike-crimson block">03</span>
+                <span class="text-xs font-extrabold text-spike-black mt-1 block">Prioritas Solusi</span>
+                <span class="text-[11px] text-[#666666]">2x2 Impact-Effort</span>
+              </div>
+              <div class="p-3.5 bg-spike-gray rounded-2xl border border-[#E5E5E5] hover:border-spike-crimson transition">
+                <span class="text-xs font-mono font-extrabold text-spike-crimson block">04</span>
+                <span class="text-xs font-extrabold text-spike-black mt-1 block">Corrective Action</span>
+                <span class="text-[11px] text-[#666666]">Contain vs Prevent</span>
+              </div>
+              <div class="p-3.5 bg-spike-gray rounded-2xl border border-[#E5E5E5] hover:border-spike-black transition">
+                <span class="text-xs font-mono font-extrabold text-spike-black block">05</span>
+                <span class="text-xs font-extrabold text-spike-black mt-1 block">Feedback Loop</span>
+                <span class="text-[11px] text-[#666666]">PDCA Telemetri</span>
+              </div>
+            </div>
+
+            <!-- Profile & CTA -->
+            <div class="flex flex-wrap items-center justify-between gap-4 p-5 rounded-2xl bg-spike-black text-white mt-4 shadow-lg">
+              <div class="text-xs text-slate-300 space-y-0.5">
+                <span class="font-extrabold text-white text-sm block">Sasaran: First-time Lead / Supervisor / Manager (≤ 2 Tahun)</span>
+                <span>Standar Kelulusan: Skor Minimum 80% • Siap Ekspor ke SAP SuccessFactors</span>
+              </div>
+              <button onclick="navigateUnit(1)" class="px-6 py-2.5 rounded-full bg-spike-crimson hover:bg-spike-crimson-dark text-white font-extrabold text-xs shadow-md transition flex items-center gap-2 active:scale-95">
+                <span>Mulai Pembelajaran Unit 1</span>
+                <span class="material-symbols-outlined text-sm">arrow_forward</span>
+              </button>
+            </div>
+          </div>
+        `
+      },
+      {
+        id: 1,
+        title: "3 Bias Fatal Pengambilan Keputusan",
+        badge: "3D Flip Cards",
+        audioSrc: "audio/unit_01.mp3",
+        reqTask: true,
+        timerSec: 10,
+        render: () => `
+          <div class="space-y-5">
+            <div class="flex items-center justify-between pb-2 border-b border-[#E5E5E5]">
+              <div>
+                <span class="text-[10px] font-extrabold uppercase tracking-wider text-spike-crimson bg-spike-crimson-light px-2.5 py-0.5 rounded-full border border-spike-crimson-border">Mindset Trap</span>
+                <h2 class="text-xl font-extrabold text-spike-black mt-1">3 Perangkap Kognitif yang Harus Dihindari New Leader</h2>
+              </div>
+              <span id="flipCountBadge" class="text-xs font-mono font-bold text-spike-crimson bg-spike-crimson-light px-3 py-1 rounded-full border border-spike-crimson-border">Balik Kartu (0/3)</span>
+            </div>
+
+            <p class="text-xs text-[#555555]">
+              Banyak pemimpin baru terjebak pada tiga bias fatal di bawah ini. <strong>Klik setiap kartu untuk membalik</strong> dan mempelajari risiko operasionalnya:
+            </p>
+
+            <!-- 3D Flip Cards Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+              
+              <!-- Card 1: Action Bias -->
+              <div class="flip-card min-h-[260px] h-68 perspective-1000 cursor-pointer" onclick="handleCardFlip(1, this)" data-card-id="1">
+                <div class="flip-inner relative w-full h-full duration-700 transform-style-3d transition-transform rounded-3xl shadow-soft border border-[#E5E5E5]">
+                  <div class="flip-front absolute inset-0 backface-hidden bg-white p-6 rounded-3xl flex flex-col justify-between overflow-y-auto">
+                    <div>
+                      <div class="flex items-center justify-between">
+                        <span class="text-xs font-mono font-extrabold text-spike-crimson">01</span>
+                        <span class="material-symbols-outlined text-spike-crimson text-xl">bolt</span>
+                      </div>
+                      <h3 class="text-base font-extrabold text-spike-black mt-2">Action Bias</h3>
+                      <p class="text-xs text-[#555555] mt-2 leading-relaxed">
+                        <em>"Yang penting gerak cepat dulu!"</em><br>
+                        Kecenderungan langsung mengeksekusi solusi tergesa-gesa tanpa memahami akar masalah hanya demi terlihat sibuk dan responsif.
+                      </p>
+                    </div>
+                    <div class="pt-2 border-t border-[#EEEEEE] text-[11px] font-bold text-spike-crimson flex justify-between items-center">
+                      <span>Klik untuk membalik</span>
+                      <span class="material-symbols-outlined text-sm">sync</span>
+                    </div>
+                  </div>
+                  <div class="flip-back absolute inset-0 backface-hidden rotate-y-180 bg-spike-black text-white p-6 rounded-3xl flex flex-col justify-between overflow-y-auto border border-spike-crimson">
+                    <div>
+                      <span class="text-[10px] font-mono font-bold text-spike-crimson uppercase tracking-wider block">Dampak Fatal:</span>
+                      <p class="text-xs text-slate-300 mt-2 leading-relaxed">
+                        Mengobati gejala permukaan. Anggaran habis dan energi tim terkuras, sementara akar masalah terus berulang setiap kuartal.
+                      </p>
+                    </div>
+                    <div class="text-right text-[11px] font-extrabold text-emerald-400 flex items-center justify-end gap-1">
+                      <span class="material-symbols-outlined text-sm">check_circle</span>
+                      <span>Sudah Ditinjau</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Card 2: Confirmation Bias -->
+              <div class="flip-card min-h-[260px] h-68 perspective-1000 cursor-pointer" onclick="handleCardFlip(2, this)" data-card-id="2">
+                <div class="flip-inner relative w-full h-full duration-700 transform-style-3d transition-transform rounded-3xl shadow-soft border border-[#E5E5E5]">
+                  <div class="flip-front absolute inset-0 backface-hidden bg-white p-6 rounded-3xl flex flex-col justify-between overflow-y-auto">
+                    <div>
+                      <div class="flex items-center justify-between">
+                        <span class="text-xs font-mono font-extrabold text-spike-blue">02</span>
+                        <span class="material-symbols-outlined text-spike-blue text-xl">fact_check</span>
+                      </div>
+                      <h3 class="text-base font-extrabold text-spike-black mt-2">Confirmation Bias</h3>
+                      <p class="text-xs text-[#555555] mt-2 leading-relaxed">
+                        <em>"Datanya cocok dengan opiniku!"</em><br>
+                        Hanya mencari dan mempercayai data yang mendukung firasat/asumsi pribadi, sambil mengabaikan fakta kontradiktif di lapangan.
+                      </p>
+                    </div>
+                    <div class="pt-2 border-t border-[#EEEEEE] text-[11px] font-bold text-spike-blue flex justify-between items-center">
+                      <span>Klik untuk membalik</span>
+                      <span class="material-symbols-outlined text-sm">sync</span>
+                    </div>
+                  </div>
+                  <div class="flip-back absolute inset-0 backface-hidden rotate-y-180 bg-spike-black text-white p-6 rounded-3xl flex flex-col justify-between overflow-y-auto border border-spike-blue">
+                    <div>
+                      <span class="text-[10px] font-mono font-bold text-spike-blue uppercase tracking-wider block">Dampak Fatal:</span>
+                      <p class="text-xs text-slate-300 mt-2 leading-relaxed">
+                        Buta terhadap anomali pasar dan menutup suara kritis dari tim di garda depan, menyebabkan kegagalan produk yang fatal.
+                      </p>
+                    </div>
+                    <div class="text-right text-[11px] font-extrabold text-emerald-400 flex items-center justify-end gap-1">
+                      <span class="material-symbols-outlined text-sm">check_circle</span>
+                      <span>Sudah Ditinjau</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Card 3: Analysis Paralysis -->
+              <div class="flip-card min-h-[260px] h-68 perspective-1000 cursor-pointer" onclick="handleCardFlip(3, this)" data-card-id="3">
+                <div class="flip-inner relative w-full h-full duration-700 transform-style-3d transition-transform rounded-3xl shadow-soft border border-[#E5E5E5]">
+                  <div class="flip-front absolute inset-0 backface-hidden bg-white p-6 rounded-3xl flex flex-col justify-between overflow-y-auto">
+                    <div>
+                      <div class="flex items-center justify-between">
+                        <span class="text-xs font-mono font-extrabold text-spike-black">03</span>
+                        <span class="material-symbols-outlined text-spike-black text-xl">hourglass_empty</span>
+                      </div>
+                      <h3 class="text-base font-extrabold text-spike-black mt-2">Analysis Paralysis</h3>
+                      <p class="text-xs text-[#555555] mt-2 leading-relaxed">
+                        <em>"Datanya belum 100% sempurna..."</em><br>
+                        Ketakutan berlebih membuat keputusan hingga terjebak rapat tanpa ujung, menunda eksekusi hingga kehilangan momentum bisnis.
+                      </p>
+                    </div>
+                    <div class="pt-2 border-t border-[#EEEEEE] text-[11px] font-bold text-spike-black flex justify-between items-center">
+                      <span>Klik untuk membalik</span>
+                      <span class="material-symbols-outlined text-sm">sync</span>
+                    </div>
+                  </div>
+                  <div class="flip-back absolute inset-0 backface-hidden rotate-y-180 bg-spike-black text-white p-6 rounded-3xl flex flex-col justify-between overflow-y-auto border border-[#444]">
+                    <div>
+                      <span class="text-[10px] font-mono font-bold text-slate-400 uppercase tracking-wider block">Dampak Fatal:</span>
+                      <p class="text-xs text-slate-300 mt-2 leading-relaxed">
+                        Tim menjadi pasif, inovasi terhenti, dan kompetitor yang lebih lincah merebut pangsa pasar.
+                      </p>
+                    </div>
+                    <div class="text-right text-[11px] font-extrabold text-emerald-400 flex items-center justify-end gap-1">
+                      <span class="material-symbols-outlined text-sm">check_circle</span>
+                      <span>Sudah Ditinjau</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Bottom agile rule banner -->
+            <div class="p-3.5 bg-spike-blue-light border border-spike-blue-border rounded-2xl text-spike-black text-xs font-medium flex items-center gap-3">
+              <span class="material-symbols-outlined text-spike-blue text-xl">lightbulb</span>
+              <span><strong>Agile Leadership Rule:</strong> Gunakan data untuk memperkecil risiko, gunakan iterasi cepat untuk membuktikan asumsi.</span>
+            </div>
+          </div>
+        `
+      },
+      {
+        id: 2,
+        title: "Langkah 1: Identifikasi Masalah (5W2H)",
+        badge: "Interactive Tabs",
+        audioSrc: "audio/unit_02.mp3",
+        reqTask: true,
+        timerSec: 10,
+        render: () => `
+          <div class="space-y-5">
+            <div class="flex items-center justify-between pb-2 border-b border-[#E5E5E5]">
+              <div>
+                <span class="text-[10px] font-extrabold uppercase tracking-wider text-spike-blue bg-spike-blue-light px-2.5 py-0.5 rounded-full border border-spike-blue-border">Langkah 1 • Diagnosa</span>
+                <h2 class="text-xl font-extrabold text-spike-black mt-1">Memisahkan Gejala vs Masalah Sebenarnya</h2>
+              </div>
+              <span id="tabCountBadge" class="text-xs font-mono font-bold text-spike-blue bg-spike-blue-light px-3 py-1 rounded-full border border-spike-blue-border">Tab Dilihat (1/3)</span>
+            </div>
+
+            <!-- Tab Buttons -->
+            <div class="flex flex-wrap gap-2 border-b border-[#E5E5E5] pb-2">
+              <button onclick="switchTab('tab-iceberg')" id="btn-tab-iceberg" class="tab-btn px-4 py-2 rounded-full text-xs font-extrabold transition bg-spike-blue text-white shadow-sm flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-sm">ac_unit</span>
+                <span>Iceberg Model (Gunung Es)</span>
+              </button>
+              <button onclick="switchTab('tab-5w2h')" id="btn-tab-5w2h" class="tab-btn px-4 py-2 rounded-full text-xs font-extrabold transition bg-spike-gray text-spike-black hover:bg-[#EAEAEA] flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-sm">adjust</span>
+                <span>Rumusan Masalah 5W2H</span>
+              </button>
+              <button onclick="switchTab('tab-baseline')" id="btn-tab-baseline" class="tab-btn px-4 py-2 rounded-full text-xs font-extrabold transition bg-spike-gray text-spike-black hover:bg-[#EAEAEA] flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-sm">analytics</span>
+                <span>Verifikasi Baseline Metrik</span>
+              </button>
+            </div>
+
+            <!-- Tab Content 1: Iceberg -->
+            <div id="tab-iceberg" class="tab-pane space-y-3">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="p-4 bg-spike-crimson-light border border-spike-crimson-border rounded-2xl">
+                  <span class="text-xs font-extrabold text-spike-crimson flex items-center gap-1">
+                    <span class="material-symbols-outlined text-sm">warning</span>
+                    <span>DI ATAS PERMUKAAN (GEJALA / SYMPTOM):</span>
+                  </span>
+                  <ul class="list-disc pl-4 text-xs text-spike-black mt-2 space-y-1">
+                    <li>Komplain keluhan pelanggan melonjak 35%</li>
+                    <li>Pendapatan penjualan Q3 anjlok Rp 450 Juta</li>
+                    <li>Tingkat turnover staf operasional meningkat</li>
+                  </ul>
+                  <p class="text-[11px] text-spike-crimson mt-2 italic font-semibold">*Ini hanyalah rasa sakit fisik yang dirasakan, BUKAN penyakit utamanya!*</p>
+                </div>
+                <div class="p-4 bg-emerald-50 border border-emerald-200 rounded-2xl">
+                  <span class="text-xs font-extrabold text-emerald-800 flex items-center gap-1">
+                    <span class="material-symbols-outlined text-sm">check_circle</span>
+                    <span>DI BAWAH PERMUKAAN (AKAR MASALAH / ROOT CAUSE):</span>
+                  </span>
+                  <ul class="list-disc pl-4 text-xs text-emerald-950 mt-2 space-y-1">
+                    <li>SOP serah terima dokumen tidak sinkron antar divisi</li>
+                    <li>Sistem ERP tidak memiliki validasi otomatis SKU barang</li>
+                    <li>Ketiadaan template laporan terpusat di cloud</li>
+                  </ul>
+                  <p class="text-[11px] text-emerald-700 mt-2 font-bold">Inilah penyakit sistemik yang harus disembuhkan oleh seorang leader.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Tab Content 2: 5W2H -->
+            <div id="tab-5w2h" class="tab-pane hidden space-y-3">
+              <div class="p-4 bg-spike-gray border border-[#E5E5E5] rounded-2xl space-y-2">
+                <span class="text-xs font-extrabold text-spike-crimson flex items-center gap-1">
+                  <span class="material-symbols-outlined text-sm">cancel</span>
+                  <span>CONTOH RUMUSAN MASALAH BURUK (PREMATUR):</span>
+                </span>
+                <p class="text-xs text-[#555555] italic">"Penjualan anjlok karena tim sales kurang motivasi dan butuh training motivasi segera."</p>
+                <p class="text-[11px] text-[#777777]">Kelemahan: Mencampuradukkan asumsi penyebab dan memaksakan solusi tunggal tanpa verifikasi data.</p>
+              </div>
+              <div class="p-4 bg-spike-blue-light border border-spike-blue-border rounded-2xl space-y-2">
+                <span class="text-xs font-extrabold text-spike-blue flex items-center gap-1">
+                  <span class="material-symbols-outlined text-sm">check_circle</span>
+                  <span>CONTOH RUMUSAN MASALAH EFEKTIF (5W2H):</span>
+                </span>
+                <p class="text-xs text-spike-black font-extrabold">"Konversi prospek ke deal pada Q3 turun sebesar 28% dibandingkan Q2 di segmen B2B Enterprise, mengakibatkan shortfall pendapatan Rp 450 Juta."</p>
+                <p class="text-[11px] text-spike-blue font-semibold">Kelebihan: Faktual, terukur (ada baseline), objektif, dan berfokus pada dampak bisnis nyata.</p>
+              </div>
+            </div>
+
+            <!-- Tab Content 3: Baseline -->
+            <div id="tab-baseline" class="tab-pane hidden space-y-3">
+              <div class="p-4 bg-amber-50 border border-amber-200 rounded-2xl text-xs space-y-2">
+                <span class="font-extrabold text-amber-900 block">Prinsip Emas: Ubah Pernyataan Kualitatif Menjadi Kuantitatif</span>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                  <div class="p-3 bg-white rounded-xl border border-amber-200">
+                    <span class="text-spike-crimson font-bold block">Kualitatif (Subjektif):</span>
+                    <span class="text-[#666666]">"Pekerjaan tim kami terasa sangat lambat minggu ini."</span>
+                  </div>
+                  <div class="p-3 bg-white rounded-xl border border-amber-200">
+                    <span class="text-emerald-700 font-bold block">Kuantitatif (Data Telemetri):</span>
+                    <span class="text-slate-800">"SLA penyelesaian tiket eskalasi meningkat dari 2 jam menjadi 7,4 jam."</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        `
+      },
+      {
+        id: 3,
+        title: "Langkah 2: Analisa Akar Masalah (Fishbone & 5-Whys)",
+        badge: "Interactive Stepper",
+        audioSrc: "audio/unit_03.mp3",
+        reqTask: true,
+        timerSec: 10,
+        render: () => `
+          <div class="space-y-5">
+            <div class="flex items-center justify-between pb-2 border-b border-[#E5E5E5]">
+              <div>
+                <span class="text-[10px] font-extrabold uppercase tracking-wider text-spike-blue bg-spike-blue-light px-2.5 py-0.5 rounded-full border border-spike-blue-border">Langkah 2 • Investigasi</span>
+                <h2 class="text-xl font-extrabold text-spike-black mt-1">Diagram Ishikawa &amp; Menembus Akar Masalah 5-Whys</h2>
+              </div>
+              <span id="whyStepBadge" class="text-xs font-mono font-bold text-spike-blue bg-spike-blue-light px-3 py-1 rounded-full border border-spike-blue-border">Mengapa ke-1 / 5</span>
+            </div>
+
+            <!-- Fishbone 4 Pins with Google Icons -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+              <div onclick="selectFishPin('people')" class="p-3.5 rounded-2xl border border-[#E5E5E5] bg-spike-gray hover:border-spike-blue cursor-pointer text-center transition group">
+                <span class="material-symbols-outlined text-2xl text-spike-black group-hover:text-spike-blue transition">groups</span>
+                <span class="text-xs font-extrabold text-spike-black block mt-1">Manpower</span>
+                <span class="text-[10px] text-[#777777]">Skill &amp; Beban Kerja</span>
+              </div>
+              <div onclick="selectFishPin('method')" class="p-3.5 rounded-2xl border border-[#E5E5E5] bg-spike-gray hover:border-spike-blue cursor-pointer text-center transition group">
+                <span class="material-symbols-outlined text-2xl text-spike-black group-hover:text-spike-blue transition">assignment</span>
+                <span class="text-xs font-extrabold text-spike-black block mt-1">Method</span>
+                <span class="text-[10px] text-[#777777]">SOP &amp; Birokrasi</span>
+              </div>
+              <div onclick="selectFishPin('machine')" class="p-3.5 rounded-2xl border border-[#E5E5E5] bg-spike-gray hover:border-spike-blue cursor-pointer text-center transition group">
+                <span class="material-symbols-outlined text-2xl text-spike-black group-hover:text-spike-blue transition">precision_manufacturing</span>
+                <span class="text-xs font-extrabold text-spike-black block mt-1">Machine</span>
+                <span class="text-[10px] text-[#777777]">Tools &amp; Bug Sistem</span>
+              </div>
+              <div onclick="selectFishPin('material')" class="p-3.5 rounded-2xl border border-[#E5E5E5] bg-spike-gray hover:border-spike-blue cursor-pointer text-center transition group">
+                <span class="material-symbols-outlined text-2xl text-spike-black group-hover:text-spike-blue transition">inventory_2</span>
+                <span class="text-xs font-extrabold text-spike-black block mt-1">Material</span>
+                <span class="text-[10px] text-[#777777]">Data &amp; Brief Input</span>
+              </div>
+            </div>
+
+            <!-- Dynamic Pin Info -->
+            <div id="fishInfoBox" class="p-3.5 bg-spike-blue-light border border-spike-blue-border rounded-2xl text-xs text-spike-black flex items-center gap-2">
+              <span class="material-symbols-outlined text-spike-blue text-lg">info</span>
+              <span><em>Klik salah satu sirip di atas untuk melihat pertanyaan pemandu investigasi tim.</em></span>
+            </div>
+
+            <!-- 5-Whys Interactive Stepper -->
+            <div class="p-4 bg-spike-gray border border-[#E5E5E5] rounded-2xl space-y-3">
+              <span class="text-xs font-extrabold text-spike-black uppercase tracking-wider block">Simulasi Kasus: Teknik 5-Whys Laporan Terlambat</span>
+              
+              <div id="whyStepperContent" class="p-3.5 bg-white rounded-xl border border-[#E5E5E5] text-xs text-spike-black min-h-[60px] flex items-center">
+                <strong>Kenapa 1:</strong> Mengapa laporan bulanan terlambat diserahkan? ➔ <em>Data penjualan dari kantor cabang belum direkap.</em>
+              </div>
+
+              <div class="flex items-center justify-between pt-1">
+                <button onclick="prevWhyStep()" id="btnPrevWhy" class="px-3.5 py-1.5 rounded-full border border-[#D5D5D5] text-xs font-bold text-[#666666] disabled:opacity-40 flex items-center gap-1 transition" disabled>
+                  <span class="material-symbols-outlined text-sm">arrow_back</span>
+                  <span>Sebelumnya</span>
+                </button>
+                <button onclick="nextWhyStep()" id="btnNextWhy" class="px-5 py-1.5 rounded-full bg-spike-blue text-white text-xs font-extrabold hover:bg-spike-blue-dark transition flex items-center gap-1 shadow-sm">
+                  <span>Gali 'Mengapa' Berikutnya</span>
+                  <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        `
+      },
+      {
+        id: 4,
+        title: "Latihan Formatif: Lapisan Masalah",
+        badge: "Drag & Drop",
+        audioSrc: "audio/unit_04.mp3",
+        reqTask: true,
+        timerSec: 10,
+        render: () => `
+          <div class="space-y-5">
+            <div class="flex items-center justify-between pb-2 border-b border-[#E5E5E5]">
+              <div>
+                <span class="text-[10px] font-extrabold uppercase tracking-wider text-spike-crimson bg-spike-crimson-light px-2.5 py-0.5 rounded-full border border-spike-crimson-border">Latihan Formatif</span>
+                <h2 class="text-xl font-extrabold text-spike-black mt-1">Tarik &amp; Letakkan Label Lapisan Masalah yang Tepat</h2>
+              </div>
+              <span id="dragScoreBadge" class="text-xs font-mono font-bold text-spike-crimson bg-spike-crimson-light px-3 py-1 rounded-full border border-spike-crimson-border">Terjawab (0/3)</span>
+            </div>
+
+            <p class="text-xs text-[#555555]">
+              Tarik label di bawah ini ke dalam target kotak kasus gudang logistik yang sesuai:
+            </p>
+
+            <!-- Draggable Chips Source -->
+            <div class="flex flex-wrap gap-2 p-3.5 bg-spike-gray border border-[#E5E5E5] rounded-2xl" id="chipsPool">
+              <div id="chip-symptom" draggable="true" ondragstart="handleDragStart(event, 'symptom')" class="draggable-chip px-4 py-2 rounded-full bg-spike-crimson text-white font-extrabold text-xs shadow-sm flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-sm">drag_indicator</span>
+                <span>Gejala Permukaan (Symptom)</span>
+              </div>
+              <div id="chip-direct" draggable="true" ondragstart="handleDragStart(event, 'direct')" class="draggable-chip px-4 py-2 rounded-full bg-amber-500 text-white font-extrabold text-xs shadow-sm flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-sm">drag_indicator</span>
+                <span>Penyebab Antara (Direct Cause)</span>
+              </div>
+              <div id="chip-root" draggable="true" ondragstart="handleDragStart(event, 'root')" class="draggable-chip px-4 py-2 rounded-full bg-spike-blue text-white font-extrabold text-xs shadow-sm flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-sm">drag_indicator</span>
+                <span>Akar Masalah (Root Cause)</span>
+              </div>
+            </div>
+
+            <!-- Target Drop Slots -->
+            <div class="space-y-3">
+              <!-- Slot 1 -->
+              <div class="p-4 rounded-2xl border-2 border-dashed border-[#CCCCCC] bg-white drop-target flex flex-col sm:flex-row sm:items-center justify-between gap-3" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event, 'symptom', 'target-1')">
+                <div class="text-xs text-spike-black">
+                  <span class="font-extrabold text-spike-black block">Fakta 1:</span>
+                  <span class="text-[#555555]">"Tingkat komplain pelanggan atas pesanan salah naik 35% pada kuartal ini."</span>
+                </div>
+                <div id="target-1" class="h-9 min-w-[200px] rounded-full border border-[#DDDDDD] bg-spike-gray flex items-center justify-center text-[11px] text-[#888888] font-bold">
+                  Letakkan label di sini
+                </div>
+              </div>
+
+              <!-- Slot 2 -->
+              <div class="p-4 rounded-2xl border-2 border-dashed border-[#CCCCCC] bg-white drop-target flex flex-col sm:flex-row sm:items-center justify-between gap-3" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event, 'direct', 'target-2')">
+                <div class="text-xs text-spike-black">
+                  <span class="font-extrabold text-spike-black block">Fakta 2:</span>
+                  <span class="text-[#555555]">"Staf gudang salah membaca label barcode produk saat proses packing."</span>
+                </div>
+                <div id="target-2" class="h-9 min-w-[200px] rounded-full border border-[#DDDDDD] bg-spike-gray flex items-center justify-center text-[11px] text-[#888888] font-bold">
+                  Letakkan label di sini
+                </div>
+              </div>
+
+              <!-- Slot 3 -->
+              <div class="p-4 rounded-2xl border-2 border-dashed border-[#CCCCCC] bg-white drop-target flex flex-col sm:flex-row sm:items-center justify-between gap-3" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event, 'root', 'target-3')">
+                <div class="text-xs text-spike-black">
+                  <span class="font-extrabold text-spike-black block">Fakta 3:</span>
+                  <span class="text-[#555555]">"Sistem ERP tidak melakukan verifikasi otomatis antara SKU pesanan &amp; SKU fisik."</span>
+                </div>
+                <div id="target-3" class="h-9 min-w-[200px] rounded-full border border-[#DDDDDD] bg-spike-gray flex items-center justify-center text-[11px] text-[#888888] font-bold">
+                  Letakkan label di sini
+                </div>
+              </div>
+            </div>
+
+            <!-- Feedback Alert -->
+            <div id="dragFeedbackBox" class="hidden p-3.5 bg-emerald-50 border border-emerald-300 rounded-2xl text-xs text-emerald-950 font-medium flex items-center gap-2">
+              <span class="material-symbols-outlined text-emerald-600 text-lg">verified</span>
+              <span><strong>Tepat Sekali!</strong> Anda berpikir sebagai strategic leader. Menghukum staf (Fakta 2) tidak akan menyelesaikan masalah jika celah kontrol sistem ERP (Fakta 3) tidak dibenahi.</span>
+            </div>
+          </div>
+        `
+      },
+      {
+        id: 5,
+        title: "Langkah 3: Prioritas Solusi (Impact vs Effort)",
+        badge: "2x2 Matrix Simulator",
+        audioSrc: "audio/unit_05.mp3",
+        reqTask: true,
+        timerSec: 10,
+        render: () => `
+          <div class="space-y-5">
+            <div class="flex items-center justify-between pb-2 border-b border-[#E5E5E5]">
+              <div>
+                <span class="text-[10px] font-extrabold uppercase tracking-wider text-spike-crimson bg-spike-crimson-light px-2.5 py-0.5 rounded-full border border-spike-crimson-border">Langkah 3 • Keputusan</span>
+                <h2 class="text-xl font-extrabold text-spike-black mt-1">Matriks 2x2 Prioritisasi: Dampak vs Usaha</h2>
+              </div>
+              <span id="matrixCountBadge" class="text-xs font-mono font-bold text-spike-crimson bg-spike-crimson-light px-3 py-1 rounded-full border border-spike-crimson-border">Kuadran (1/4)</span>
+            </div>
+
+            <p class="text-xs text-[#555555]">
+              Jangan eksekusi semua ide sekaligus! <strong>Klik masing-masing kuadran</strong> untuk mempelajari alokasi sumber daya tim Anda:
+            </p>
+
+            <!-- 2x2 Matrix Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <!-- Q1 -->
+              <div onclick="selectMatrixQuad(1)" id="quad-1" class="p-4 rounded-3xl border-2 border-emerald-400 bg-emerald-50/60 hover:bg-emerald-100/60 cursor-pointer transition">
+                <div class="flex items-center justify-between">
+                  <span class="text-xs font-extrabold text-emerald-950 flex items-center gap-1">
+                    <span class="material-symbols-outlined text-emerald-600 text-base">star</span>
+                    <span>KUADRAN I: QUICK WINS</span>
+                  </span>
+                  <span class="text-[9px] font-mono text-emerald-800 bg-white px-2.5 py-0.5 rounded-full font-bold border border-emerald-200">HIGH IMPACT • LOW EFFORT</span>
+                </div>
+                <p class="text-xs text-slate-700 mt-2 leading-relaxed">
+                  Solusi cepat dengan dampak besar. Prioritas nomor 1 untuk dieksekusi minggu ini demi membangun kepercayaan dan momentum tim.
+                </p>
+              </div>
+
+              <!-- Q2 -->
+              <div onclick="selectMatrixQuad(2)" id="quad-2" class="p-4 rounded-3xl border-2 border-spike-blue bg-spike-blue-light/50 hover:bg-spike-blue-light cursor-pointer transition">
+                <div class="flex items-center justify-between">
+                  <span class="text-xs font-extrabold text-spike-black flex items-center gap-1">
+                    <span class="material-symbols-outlined text-spike-blue text-base">rocket_launch</span>
+                    <span>KUADRAN II: MAJOR PROJECTS</span>
+                  </span>
+                  <span class="text-[9px] font-mono text-spike-blue bg-white px-2.5 py-0.5 rounded-full font-bold border border-spike-blue-border">HIGH IMPACT • HIGH EFFORT</span>
+                </div>
+                <p class="text-xs text-slate-700 mt-2 leading-relaxed">
+                  Inisiatif strategis bernilai tinggi. Masukkan ke roadmap kuartalan dan pecah menjadi milestone kecil mingguan.
+                </p>
+              </div>
+
+              <!-- Q3 -->
+              <div onclick="selectMatrixQuad(3)" id="quad-3" class="p-4 rounded-3xl border-2 border-amber-300 bg-amber-50/50 hover:bg-amber-100/50 cursor-pointer transition">
+                <div class="flex items-center justify-between">
+                  <span class="text-xs font-extrabold text-amber-950 flex items-center gap-1">
+                    <span class="material-symbols-outlined text-amber-600 text-base">hourglass_empty</span>
+                    <span>KUADRAN III: FILL-INS</span>
+                  </span>
+                  <span class="text-[9px] font-mono text-amber-800 bg-white px-2.5 py-0.5 rounded-full font-bold border border-amber-200">LOW IMPACT • LOW EFFORT</span>
+                </div>
+                <p class="text-xs text-slate-700 mt-2 leading-relaxed">
+                  Pekerjaan pelengkap. Kerjakan nanti saat waktu senggang, delegasikan ke staf magang/junior, atau lakukan otomatisasi.
+                </p>
+              </div>
+
+              <!-- Q4 -->
+              <div onclick="selectMatrixQuad(4)" id="quad-4" class="p-4 rounded-3xl border-2 border-spike-crimson bg-spike-crimson-light/50 hover:bg-spike-crimson-light cursor-pointer transition">
+                <div class="flex items-center justify-between">
+                  <span class="text-xs font-extrabold text-spike-crimson flex items-center gap-1">
+                    <span class="material-symbols-outlined text-spike-crimson text-base">block</span>
+                    <span>KUADRAN IV: THANKLESS TASKS</span>
+                  </span>
+                  <span class="text-[9px] font-mono text-spike-crimson bg-white px-2.5 py-0.5 rounded-full font-bold border border-spike-crimson-border">LOW IMPACT • HIGH EFFORT</span>
+                </div>
+                <p class="text-xs text-slate-700 mt-2 leading-relaxed">
+                  Money Pit &amp; Time Waster! Tolak atau eliminasi segera. Hanya membuang jam kerja dan anggaran tanpa hasil yang signifikan.
+                </p>
+              </div>
+            </div>
+
+            <!-- Dynamic Detail Box -->
+            <div id="matrixDetailBox" class="p-3.5 bg-spike-gray border border-[#E5E5E5] rounded-2xl text-xs text-spike-black flex items-center gap-2">
+              <span class="material-symbols-outlined text-spike-blue text-lg">calculate</span>
+              <span><em>Rumus Pembobotan: Skor Prioritas = (Nilai Dampak Finansial / Kepuasan Klien) dibagi (Estimasi Man-Hours Tim).</em></span>
+            </div>
+          </div>
+        `
+      },
+      {
+        id: 6,
+        title: "Langkah 4: Corrective Action (3 Fase)",
+        badge: "Process Stepper",
+        audioSrc: "audio/unit_06.mp3",
+        reqTask: true,
+        timerSec: 10,
+        render: () => `
+          <div class="space-y-5">
+            <div class="flex items-center justify-between pb-2 border-b border-[#E5E5E5]">
+              <div>
+                <span class="text-[10px] font-extrabold uppercase tracking-wider text-spike-blue bg-spike-blue-light px-2.5 py-0.5 rounded-full border border-spike-blue-border">Langkah 4 • Mitigasi</span>
+                <h2 class="text-xl font-extrabold text-spike-black mt-1">3 Pilar Penanggulangan Masalah yang Matang</h2>
+              </div>
+              <span id="procStepBadge" class="text-xs font-mono font-bold text-spike-blue bg-spike-blue-light px-3 py-1 rounded-full border border-spike-blue-border">Fase 1 / 3</span>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-3.5">
+              <!-- Phase 1 -->
+              <div onclick="selectProcPhase(1)" id="phase-1" class="p-4 rounded-3xl border-2 border-spike-blue bg-spike-blue-light cursor-pointer transition">
+                <div class="flex items-center gap-2">
+                  <span class="w-6 h-6 rounded-full bg-spike-blue text-white flex items-center justify-center font-extrabold text-xs">1</span>
+                  <span class="text-xs font-extrabold text-spike-black">CONTAINMENT</span>
+                </div>
+                <span class="text-[10px] text-spike-blue font-bold block mt-1">Waktu: Hitungan Jam</span>
+                <p class="text-xs text-[#555555] mt-2 leading-relaxed">
+                  Menahan dampak langsung agar tidak menjalar ke klien lain (contoh: rollback versi software yang stabil, isolasi batch produk cacat).
+                </p>
+              </div>
+
+              <!-- Phase 2 -->
+              <div onclick="selectProcPhase(2)" id="phase-2" class="p-4 rounded-3xl border-2 border-[#E5E5E5] bg-spike-gray hover:bg-[#EAEAEA] cursor-pointer transition">
+                <div class="flex items-center gap-2">
+                  <span class="w-6 h-6 rounded-full bg-spike-black text-white flex items-center justify-center font-extrabold text-xs">2</span>
+                  <span class="text-xs font-extrabold text-spike-black">CORRECTIVE</span>
+                </div>
+                <span class="text-[10px] text-[#777777] font-bold block mt-1">Waktu: Hitungan Minggu</span>
+                <p class="text-xs text-[#555555] mt-2 leading-relaxed">
+                  Memperbaiki cacat sistem dasar atau alur kerja (contoh: pembaruan skrip validasi formulir, revisi SOP penerimaan barang).
+                </p>
+              </div>
+
+              <!-- Phase 3 -->
+              <div onclick="selectProcPhase(3)" id="phase-3" class="p-4 rounded-3xl border-2 border-[#E5E5E5] bg-spike-gray hover:bg-[#EAEAEA] cursor-pointer transition">
+                <div class="flex items-center gap-2">
+                  <span class="w-6 h-6 rounded-full bg-spike-crimson text-white flex items-center justify-center font-extrabold text-xs">3</span>
+                  <span class="text-xs font-extrabold text-spike-black">PREVENTIVE</span>
+                </div>
+                <span class="text-[10px] text-spike-crimson font-bold block mt-1">Waktu: Berkelanjutan</span>
+                <p class="text-xs text-[#555555] mt-2 leading-relaxed">
+                  Mengunci sistem agar mustahil terulang di masa depan (*mistake-proofing / Poka-Yoke*, automasi testing, dan audit berkala).
+                </p>
+              </div>
+            </div>
+
+            <!-- Phase Guide Box -->
+            <div id="phaseDetailBox" class="p-3.5 bg-spike-blue-light border border-spike-blue-border rounded-2xl text-xs text-spike-black flex items-center gap-2">
+              <span class="material-symbols-outlined text-spike-blue text-lg">shield</span>
+              <span><strong>Fase 1 (Containment):</strong> Lindungi kepuasan klien dan reputasi bisnis terlebih dahulu sebelum memulai rapat evaluasi panjang.</span>
+            </div>
+          </div>
+        `
+      },
+      {
+        id: 7,
+        title: "Langkah 5: Agile Feedback Loop (PDCA)",
+        badge: "Cycled Process",
+        audioSrc: "audio/unit_07.mp3",
+        reqTask: true,
+        timerSec: 10,
+        render: () => `
+          <div class="space-y-5">
+            <div class="flex items-center justify-between pb-2 border-b border-[#E5E5E5]">
+              <div>
+                <span class="text-[10px] font-extrabold uppercase tracking-wider text-spike-blue bg-spike-blue-light px-2.5 py-0.5 rounded-full border border-spike-blue-border">Langkah 5 • Eksekusi</span>
+                <h2 class="text-xl font-extrabold text-spike-black mt-1">Siklus Perbaikan Berkelanjutan (PDCA Agile)</h2>
+              </div>
+              <span id="pdcaCountBadge" class="text-xs font-mono font-bold text-spike-blue bg-spike-blue-light px-3 py-1 rounded-full border border-spike-blue-border">Node PDCA (1/4)</span>
+            </div>
+
+            <!-- PDCA 4 Nodes with Google Icons -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+              <div onclick="selectPdcaNode('plan')" id="node-plan" class="p-4 rounded-3xl border-2 border-spike-blue bg-spike-blue-light cursor-pointer transition">
+                <span class="text-xs font-extrabold text-spike-black flex items-center gap-1.5">
+                  <span class="material-symbols-outlined text-spike-blue text-base">architecture</span>
+                  <span>1. PLAN (HYPOTHESIS)</span>
+                </span>
+                <p class="text-xs text-[#555555] mt-1.5 leading-relaxed">
+                  Susun rencana sebagai hipotesis terukur: <em>"Jika fitur X dirilis ke segmen Y, retention rate akan naik 20% dalam 2 minggu."</em>
+                </p>
+              </div>
+              <div onclick="selectPdcaNode('do')" id="node-do" class="p-4 rounded-3xl border-2 border-[#E5E5E5] bg-spike-gray hover:bg-[#EAEAEA] cursor-pointer transition">
+                <span class="text-xs font-extrabold text-spike-black flex items-center gap-1.5">
+                  <span class="material-symbols-outlined text-spike-black text-base">speed</span>
+                  <span>2. DO (SPRINT EXECUTION)</span>
+                </span>
+                <p class="text-xs text-[#555555] mt-1.5 leading-relaxed">
+                  Eksekusi dalam iterasi sprint singkat (1–2 minggu), bukan proyek masif 6 bulan tanpa evaluasi awal.
+                </p>
+              </div>
+              <div onclick="selectPdcaNode('check')" id="node-check" class="p-4 rounded-3xl border-2 border-[#E5E5E5] bg-spike-gray hover:bg-[#EAEAEA] cursor-pointer transition">
+                <span class="text-xs font-extrabold text-spike-black flex items-center gap-1.5">
+                  <span class="material-symbols-outlined text-spike-black text-base">query_stats</span>
+                  <span>3. CHECK (DATA TELEMETRY)</span>
+                </span>
+                <p class="text-xs text-[#555555] mt-1.5 leading-relaxed">
+                  Ukur hasil dengan metrik data analitik objektif, bukan perasaan subjektif atau asumsi tim rapat.
+                </p>
+              </div>
+              <div onclick="selectPdcaNode('act')" id="node-act" class="p-4 rounded-3xl border-2 border-[#E5E5E5] bg-spike-gray hover:bg-[#EAEAEA] cursor-pointer transition">
+                <span class="text-xs font-extrabold text-spike-black flex items-center gap-1.5">
+                  <span class="material-symbols-outlined text-spike-crimson text-base">published_with_changes</span>
+                  <span>4. ACT (PIVOT OR PERSEVERE)</span>
+                </span>
+                <p class="text-xs text-[#555555] mt-1.5 leading-relaxed">
+                  Putuskan tegas: perluas dan standarisasi solusi jika terbukti efektif, atau segera pivot jika data menunjukkan kegagalan.
+                </p>
+              </div>
+            </div>
+
+            <!-- PDCA Telemetry Box -->
+            <div id="pdcaDetailBox" class="p-3.5 bg-spike-gray border border-[#E5E5E5] rounded-2xl text-xs text-spike-black flex items-center gap-2">
+              <span class="material-symbols-outlined text-spike-blue text-lg">autorenew</span>
+              <span>🔄 <strong>Kaizen Principle:</strong> Di dunia digital, tidak ada solusi yang sempurna sejak hari pertama. Keputusan unggul dibangun lewat eksperimen cepat.</span>
+            </div>
+          </div>
+        `
+      },
+      {
+        id: 8,
+        title: "Simulasi Keputusan: Krisis Metrik Tim",
+        badge: "Branching Scenario",
+        audioSrc: "audio/unit_08.mp3",
+        reqTask: true,
+        timerSec: 10,
+        render: () => `
+          <div class="space-y-5">
+            <div class="flex items-center justify-between pb-2 border-b border-[#E5E5E5]">
+              <div>
+                <span class="text-[10px] font-extrabold uppercase tracking-wider text-spike-crimson bg-spike-crimson-light px-2.5 py-0.5 rounded-full border border-spike-crimson-border">Simulasi Kepemimpinan</span>
+                <h2 class="text-xl font-extrabold text-spike-black mt-1">Menghadapi Krisis Penurunan Metrik Tim</h2>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="text-xs text-[#777777]">Mood Tim:</span>
+                <span id="teamMoodMeter" class="text-xs font-mono font-bold text-amber-700 bg-amber-50 px-3 py-0.5 rounded-full border border-amber-200">Cemas (50%)</span>
+              </div>
+            </div>
+
+            <!-- Character Scenario Box -->
+            <div class="p-5 rounded-3xl bg-spike-black text-white flex flex-col sm:flex-row items-start sm:items-center gap-4 shadow-md">
+              <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-spike-crimson to-spike-blue flex items-center justify-center text-white flex-shrink-0 shadow-inner">
+                <span class="material-symbols-outlined text-3xl">support_agent</span>
+              </div>
+              <div class="space-y-1">
+                <div class="flex items-center gap-2">
+                  <span class="font-extrabold text-sm text-spike-crimson-border">Dian (Senior Product Manager)</span>
+                  <span class="text-[10px] bg-spike-crimson/30 text-spike-crimson-border px-2 py-0.5 rounded-full font-bold">Tekanan Tinggi</span>
+                </div>
+                <p class="text-xs text-slate-200 italic leading-relaxed">
+                  "Lead, setelah rilis patch tadi malam, tingkat komplain error melonjak 40%! Beberapa klien enterprise mengancam memutus kontrak. Haruskah kita langsung umumkan ke publik bahwa tim backend membuat kesalahan dan membatalkan seluruh fitur baru sekarang?"
+                </p>
+              </div>
+            </div>
+
+            <!-- Response Options -->
+            <div class="space-y-2.5">
+              <span class="text-xs font-extrabold text-spike-black block">Pilihlah Respons Tindakan Terbaik Anda:</span>
+              
+              <!-- Option A -->
+              <div onclick="selectScenarioResponse('A')" id="scen-opt-A" class="p-4 rounded-2xl border border-[#E5E5E5] hover:border-emerald-500 bg-white hover:bg-emerald-50/40 cursor-pointer transition">
+                <div class="flex items-start gap-3">
+                  <span class="w-6 h-6 rounded-full bg-emerald-100 text-emerald-800 font-extrabold text-xs flex items-center justify-center flex-shrink-0 mt-0.5">A</span>
+                  <div class="text-xs text-spike-black">
+                    <strong>Structured, Data-Driven &amp; Calming:</strong><br>
+                    <span class="text-[#555555]">"Tarik napas dulu, Dian. Jangan menyalahkan tim manapun ke publik. Langkah 1: Isolasi error dengan aktifkan fallback mode untuk klien terdampak. Langkah 2: Kumpulkan log error dalam 30 menit ke depan untuk bedah akar masalah bersama lead dev. Saya yang pegang kendali komunikasi dengan klien."</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Option B -->
+              <div onclick="selectScenarioResponse('B')" id="scen-opt-B" class="p-4 rounded-2xl border border-[#E5E5E5] hover:border-spike-crimson bg-white hover:bg-spike-crimson-light cursor-pointer transition">
+                <div class="flex items-start gap-3">
+                  <span class="w-6 h-6 rounded-full bg-spike-crimson-light text-spike-crimson font-extrabold text-xs flex items-center justify-center flex-shrink-0 mt-0.5">B</span>
+                  <div class="text-xs text-spike-black">
+                    <strong>Reactive Action Bias:</strong><br>
+                    <span class="text-[#555555]">"Gawat! Cepat rollback sekarang juga dan minta tim backend buat surat peringatan internal hari ini juga!"</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Option C -->
+              <div onclick="selectScenarioResponse('C')" id="scen-opt-C" class="p-4 rounded-2xl border border-[#E5E5E5] hover:border-amber-400 bg-white hover:bg-amber-50/40 cursor-pointer transition">
+                <div class="flex items-start gap-3">
+                  <span class="w-6 h-6 rounded-full bg-amber-100 text-amber-800 font-extrabold text-xs flex items-center justify-center flex-shrink-0 mt-0.5">C</span>
+                  <div class="text-xs text-spike-black">
+                    <strong>Analysis Paralysis:</strong><br>
+                    <span class="text-[#555555]">"Jangan lakukan apapun dulu. Tunggu sampai semua jajaran direksi kumpul jam 2 siang nanti untuk minta izin tertulis."</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Feedback Result Box -->
+            <div id="scenarioFeedback" class="hidden p-4 rounded-2xl text-xs leading-relaxed"></div>
+          </div>
+        `
+      },
+      {
+        id: 9,
+        title: "Evaluasi Sumatif: Audit Keputusan",
+        badge: "Post-Test Quiz",
+        audioSrc: "audio/unit_09.mp3",
+        reqTask: true,
+        timerSec: 10,
+        render: () => `
+          <div class="space-y-5">
+            <div class="flex items-center justify-between pb-2 border-b border-[#E5E5E5]">
+              <div>
+                <span class="text-[10px] font-extrabold uppercase tracking-wider text-spike-blue bg-spike-blue-light px-2.5 py-0.5 rounded-full border border-spike-blue-border">Evaluasi Kelulusan</span>
+                <h2 class="text-xl font-extrabold text-spike-black mt-1">Studi Kasus Analitik: Squad Retention Down</h2>
+              </div>
+              <span id="quizScoreBadge" class="text-xs font-mono font-bold text-spike-blue bg-spike-blue-light px-3 py-1 rounded-full border border-spike-blue-border">Bobot: 100 Poin</span>
+            </div>
+
+            <div class="p-4 bg-spike-gray border border-[#E5E5E5] rounded-2xl space-y-2">
+              <span class="text-xs font-extrabold text-spike-black block">Deskripsi Kasus Nyata:</span>
+              <p class="text-xs text-[#555555] leading-relaxed">
+                Dashboard analitik performa produk e-commerce Anda menunjukkan penurunan <em>customer retention</em> dari <strong>60% menjadi 42%</strong> selama 2 bulan berturut-turut.
+              </p>
+              <p class="text-xs text-spike-black font-extrabold pt-1">
+                Pertanyaan: Berdasarkan prinsip Problem Solving &amp; Decision Making, manakah urutan tindakan paling tepat yang harus diambil sebelum memutuskan perubahan fitur aplikasi secara menyeluruh?
+              </p>
+            </div>
+
+            <!-- Quiz Choices -->
+            <div class="space-y-2.5">
+              <label onclick="submitQuizOption('A')" class="p-4 rounded-2xl border border-[#E5E5E5] hover:bg-spike-gray flex items-start gap-3 cursor-pointer transition block">
+                <input type="radio" name="quizOpt" value="A" class="mt-0.5 text-spike-blue focus:ring-spike-blue">
+                <span class="text-xs text-[#555555]">
+                  <strong class="text-spike-black">A.</strong> Langsung merombak antarmuka pengguna (UI) agar aplikasi terlihat lebih segar dan modern.
+                </span>
+              </label>
+
+              <label onclick="submitQuizOption('B')" class="p-4 rounded-2xl border border-[#E5E5E5] hover:bg-spike-gray flex items-start gap-3 cursor-pointer transition block">
+                <input type="radio" name="quizOpt" value="B" class="mt-0.5 text-spike-blue focus:ring-spike-blue">
+                <span class="text-xs text-[#555555]">
+                  <strong class="text-spike-black">B.</strong> Menunggu evaluasi kuartal depan hingga ada kepastian tren industri secara keseluruhan.
+                </span>
+              </label>
+
+              <label onclick="submitQuizOption('C')" class="p-4 rounded-2xl border border-[#E5E5E5] hover:bg-spike-gray flex items-start gap-3 cursor-pointer transition block">
+                <input type="radio" name="quizOpt" value="C" class="mt-0.5 text-spike-blue focus:ring-spike-blue">
+                <span class="text-xs text-[#555555]">
+                  <strong class="text-spike-black">C.</strong> Menggunakan budget besar untuk merekrut agency riset luar tanpa mengecek data log pengguna internal.
+                </span>
+              </label>
+
+              <label onclick="submitQuizOption('D')" class="p-4 rounded-2xl border border-[#E5E5E5] hover:bg-spike-blue-light/50 flex items-start gap-3 cursor-pointer transition block">
+                <input type="radio" name="quizOpt" value="D" class="mt-0.5 text-spike-blue focus:ring-spike-blue">
+                <span class="text-xs text-spike-black">
+                  <strong class="text-spike-blue">D.</strong> 1) Bedah metrik funnel per segmen pengguna ➔ 2) Wawancara 5 pengguna yang churn (kualitatif) ➔ 3) Rumuskan hipotesis akar masalah ➔ 4) Uji A/B testing solusi perbaikan pada sampel pengguna 10% sebelum rilis massal.
+                </span>
+              </label>
+            </div>
+
+            <!-- Quiz Explainer Feedback -->
+            <div id="quizFeedbackBox" class="hidden p-4 rounded-2xl text-xs leading-relaxed space-y-1"></div>
+          </div>
+        `
+      },
+      {
+        id: 10,
+        title: "Penutup: Action Plan & Toolkit Mandiri",
+        badge: "Selesai",
+        audioSrc: "audio/unit_10.mp3",
+        reqTask: false,
+        timerSec: 0,
+        render: () => `
+          <div class="space-y-6">
+            <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-extrabold">
+              <span class="material-symbols-outlined text-sm">emoji_events</span>
+              <span>MODUL SELESAI • KELULUSAN DITERBITKAN</span>
+            </div>
+
+            <h2 class="text-3xl sm:text-4xl font-extrabold text-spike-black tracking-tight leading-tight">
+              Selamat! Anda Siap Menjadi Data-Driven Problem Solver
+            </h2>
+
+            <p class="text-xs sm:text-sm text-[#555555] leading-relaxed">
+              Kepemimpinan yang hebat tidak diukur dari ketiadaan masalah, melainkan dari kedisiplinan dan kematangan metode yang Anda gunakan untuk mengatasinya bersama tim.
+            </p>
+
+            <!-- 3 Pillars Review -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
+              <div class="p-4 bg-spike-blue-light border border-spike-blue-border rounded-2xl">
+                <span class="text-xs font-extrabold text-spike-blue block">1. BEDAH AKAR MASALAH</span>
+                <p class="text-xs text-[#555555] mt-1">Gunakan Iceberg Model, rumus 5W2H, dan gali 5 tingkat 'Mengapa'.</p>
+              </div>
+              <div class="p-4 bg-spike-crimson-light border border-spike-crimson-border rounded-2xl">
+                <span class="text-xs font-extrabold text-spike-crimson block">2. PILIH SOLUSI TEPAT</span>
+                <p class="text-xs text-[#555555] mt-1">Dahulukan Quick Wins, kelola Major Projects, tolak Thankless Tasks.</p>
+              </div>
+              <div class="p-4 bg-spike-gray border border-[#E5E5E5] rounded-2xl">
+                <span class="text-xs font-extrabold text-spike-black block">3. EKSEKUSI ITERATIF</span>
+                <p class="text-xs text-[#555555] mt-1">Terapkan Containment segera, selesaikan via siklus PDCA data telemetri.</p>
+              </div>
+            </div>
+
+            <!-- Toolkit Download Box -->
+            <div class="p-5 bg-spike-gray border border-[#E5E5E5] rounded-3xl flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div>
+                <span class="text-xs font-extrabold text-spike-black block">Toolkit Penugasan Mandiri (Action Plan):</span>
+                <span class="text-xs text-[#666666]">Template Problem Solving Canvas (Format Text/PDF &amp; Lembar Kerja Kasus)</span>
+              </div>
+              <button onclick="downloadCanvasToolkit()" class="px-5 py-2.5 rounded-full bg-spike-crimson hover:bg-spike-crimson-dark text-white font-extrabold text-xs shadow-md transition flex items-center gap-2 flex-shrink-0 active:scale-95">
+                <span class="material-symbols-outlined text-sm">download</span>
+                <span>Unduh Dokumen Toolkit Canvas</span>
+              </button>
+            </div>
+
+            <!-- Completion Banner -->
+            <div class="p-5 bg-spike-black text-white rounded-3xl flex flex-wrap items-center justify-between gap-4 shadow-lg">
+              <div>
+                <span class="text-xs text-emerald-400 font-extrabold flex items-center gap-1.5">
+                  <span class="material-symbols-outlined text-base">cloud_done</span>
+                  <span>Status Terkirim ke SAP SuccessFactors (SCORM 1.2):</span>
+                </span>
+                <span class="text-xs text-slate-300 font-mono mt-0.5 block">cmi.core.lesson_status = "passed" • Skor: 100% • Mastery Confirmed</span>
+              </div>
+              <button onclick="navigateUnit(0)" class="px-5 py-2 rounded-full bg-white/10 hover:bg-white/20 text-white text-xs font-bold transition flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-sm">replay</span>
+                <span>Kembali ke Beranda</span>
+              </button>
+            </div>
+          </div>
+        `
+      }
+    ];
+
+    // --- 4. APPLICATION STATE ---
+    let state = {
+      currentUnit: 0,
+      completedUnits: new Set([0]),
+      gateTimers: {},
+      tasksCompleted: {},
+      flipsDone: new Set(),
+      tabsViewed: new Set(['tab-iceberg']),
+      currentWhyStep: 1,
+      dragMatches: {},
+      matrixQuads: new Set([1]),
+      procPhases: new Set([1]),
+      pdcaNodes: new Set(['plan']),
+      scenarioScore: 0,
+      quizPassed: false
+    };
+
+    // --- DOM REFERENCES ---
+    const audioEl = document.getElementById('courseAudio');
+    const unitContainer = document.getElementById('unitContentContainer');
+    const unitNavList = document.getElementById('unitNavList');
+    const linearProgress = document.getElementById('linearCourseProgressBar');
+    const progressText = document.getElementById('progressText');
+    const gateTimerBadge = document.getElementById('gateTimerBadge');
+    const gateTimerText = document.getElementById('gateTimerText');
+    const headerUnitTag = document.getElementById('headerUnitTag');
+    const footerUnitCounter = document.getElementById('footerUnitCounter');
+    const btnPrev = document.getElementById('btnPrev');
+    const btnNext = document.getElementById('btnNext');
+    const btnNextLabel = document.getElementById('btnNextLabel');
+
+    let timerInterval = null;
+
+    // --- INITIALIZATION ---
+    function init() {
+      scorm.init();
+      buildSidebar();
+      loadUnit(0);
+      setupAudioEvents();
+    }
+
+    // --- SIDEBAR BUILDER ---
+    function buildSidebar() {
+      unitNavList.innerHTML = UNITS.map(u => `
+        <button id="nav-item-${u.id}" onclick="onSidebarClick(${u.id})" class="w-full text-left p-2.5 rounded-2xl text-xs font-medium transition flex items-center justify-between gap-2 border border-transparent">
+          <div class="flex items-center gap-2.5 truncate">
+            <span id="nav-icon-${u.id}" class="w-6 h-6 rounded-xl flex items-center justify-center text-[10px] font-mono font-bold">
+              ${u.id}
+            </span>
+            <span class="truncate font-semibold">${u.title}</span>
+          </div>
+          <span id="nav-check-${u.id}" class="material-symbols-outlined text-sm hidden font-bold text-emerald-600">check_circle</span>
+        </button>
+      `).join('');
+      updateSidebarUI();
+    }
+
+    function updateSidebarUI() {
+      UNITS.forEach(u => {
+        const item = document.getElementById(`nav-item-${u.id}`);
+        const icon = document.getElementById(`nav-icon-${u.id}`);
+        const check = document.getElementById(`nav-check-${u.id}`);
+
+        if (state.currentUnit === u.id) {
+          item.className = "w-full text-left p-2.5 rounded-2xl text-xs font-bold transition flex items-center justify-between gap-2 bg-spike-blue-light border-spike-blue-border text-spike-blue shadow-sm";
+          icon.className = "w-6 h-6 rounded-xl bg-spike-blue text-white flex items-center justify-center text-[10px] font-mono font-bold shadow-sm";
+        } else if (state.completedUnits.has(u.id)) {
+          item.className = "w-full text-left p-2.5 rounded-2xl text-xs font-semibold transition flex items-center justify-between gap-2 text-spike-black hover:bg-spike-gray";
+          icon.className = "w-6 h-6 rounded-xl bg-emerald-100 text-emerald-800 flex items-center justify-center text-[10px] font-mono font-bold";
+          check.classList.remove('hidden');
+        } else {
+          item.className = "w-full text-left p-2.5 rounded-2xl text-xs font-medium transition flex items-center justify-between gap-2 text-[#999999] opacity-60 cursor-not-allowed";
+          icon.className = "w-6 h-6 rounded-xl bg-spike-gray text-[#888888] flex items-center justify-center text-[10px] font-mono font-bold";
+        }
+      });
+
+      // Update linear progress
+      const totalUnits = UNITS.length;
+      const completedCount = state.completedUnits.size;
+      const pct = Math.round((completedCount / totalUnits) * 100);
+      linearProgress.style.width = `${pct}%`;
+      progressText.innerText = `${pct}% Selesai`;
+    }
+
+    function onSidebarClick(unitId) {
+      if (state.completedUnits.has(unitId) || unitId === state.currentUnit) {
+        playTone('click');
+        loadUnit(unitId);
+        if (window.innerWidth < 1024) toggleSidebar();
+      } else {
+        playTone('error');
+      }
+    }
+
+    function toggleSidebar() {
+      const sb = document.getElementById('courseSidebar');
+      sb.classList.toggle('-translate-x-full');
+    }
+
+    // --- UNIT LOADER & GATE TIMERS ---
+    function loadUnit(unitId) {
+      state.currentUnit = unitId;
+      const unit = UNITS[unitId];
+
+      headerUnitTag.innerText = `Unit ${unitId} / ${UNITS.length - 1}`;
+      footerUnitCounter.innerText = `Unit ${unitId} dari ${UNITS.length - 1}`;
+      btnPrev.disabled = (unitId === 0);
+
+      // Render content
+      unitContainer.innerHTML = unit.render();
+      updateSidebarUI();
+
+      // Audio setup
+      audioEl.src = unit.audioSrc;
+      audioEl.currentTime = 0;
+      updateAudioControlsUI(false);
+      audioEl.play().then(() => updateAudioControlsUI(true)).catch(() => updateAudioControlsUI(false));
+
+      // Handle Gate Timer & Next Button lock
+      clearInterval(timerInterval);
+      const isAlreadyDone = state.completedUnits.has(unitId);
+
+      if (isAlreadyDone || unit.timerSec === 0) {
+        gateTimerBadge.classList.add('hidden');
+        btnNext.disabled = false;
+        btnNextLabel.innerText = (unitId === UNITS.length - 1) ? "Selesai" : "Lanjut ke Unit Berikutnya";
+      } else {
+        gateTimerBadge.classList.remove('hidden');
+        btnNext.disabled = true;
+        let timeRemaining = unit.timerSec;
+        gateTimerText.innerText = `${timeRemaining}s`;
+
+        timerInterval = setInterval(() => {
+          timeRemaining--;
+          if (timeRemaining > 0) {
+            gateTimerText.innerText = `${timeRemaining}s`;
+          } else {
+            clearInterval(timerInterval);
+            gateTimerBadge.classList.add('hidden');
+            checkUnitCompletion();
+          }
+        }, 1000);
+      }
+
+      // Sync SCORM Bookmark
+      scorm.saveProgress(unitId);
+    }
+
+    function checkUnitCompletion() {
+      const unit = UNITS[state.currentUnit];
+      let taskDone = true;
+
+      if (unit.reqTask) {
+        taskDone = !!state.tasksCompleted[unit.id];
+      }
+
+      if (taskDone) {
+        state.completedUnits.add(unit.id);
+        btnNext.disabled = false;
+        updateSidebarUI();
+        scorm.saveProgress(unit.id);
+      }
+    }
+
+    function markTaskDone(unitId) {
+      state.tasksCompleted[unitId] = true;
+      playTone('success');
+      checkUnitCompletion();
+    }
+
+    function navigateUnit(direction) {
+      const next = state.currentUnit + direction;
+      if (next >= 0 && next < UNITS.length) {
+        playTone('click');
+        loadUnit(next);
+      }
+    }
+
+    // --- AUDIO SYSTEM ---
+    function setupAudioEvents() {
+      audioEl.addEventListener('timeupdate', () => {
+        const cur = audioEl.currentTime || 0;
+        const dur = audioEl.duration || 1;
+        document.getElementById('audioCurrentTime').innerText = formatTime(cur);
+        document.getElementById('audioTotalDuration').innerText = formatTime(dur);
+        const pct = (cur / dur) * 100;
+        document.getElementById('audioProgressBar').style.width = `${pct}%`;
+      });
+
+      audioEl.addEventListener('ended', () => {
+        updateAudioControlsUI(false);
+      });
+    }
+
+    function formatTime(sec) {
+      const m = Math.floor(sec / 60);
+      const s = Math.floor(sec % 60);
+      return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+    }
+
+    function toggleAudio() {
+      if (audioEl.paused) {
+        audioEl.play().then(() => updateAudioControlsUI(true));
+      } else {
+        audioEl.pause();
+        updateAudioControlsUI(false);
+      }
+    }
+
+    function updateAudioControlsUI(isPlaying) {
+      const p = document.getElementById('iconPlay');
+      const s = document.getElementById('iconPause');
+      if (isPlaying) {
+        p.classList.add('hidden');
+        s.classList.remove('hidden');
+      } else {
+        p.classList.remove('hidden');
+        s.classList.add('hidden');
+      }
+    }
+
+    function replayAudio() {
+      audioEl.currentTime = 0;
+      audioEl.play().then(() => updateAudioControlsUI(true));
+      playTone('click');
+    }
+
+    function seekAudio(e) {
+      const bar = e.currentTarget;
+      const rect = bar.getBoundingClientRect();
+      const clickX = e.clientX - rect.left;
+      const pct = clickX / rect.width;
+      audioEl.currentTime = pct * audioEl.duration;
+    }
+
+    // --- INTERACTION HANDLERS PER UNIT ---
+
+    // Unit 1: 3D Flip Cards
+    function handleCardFlip(cardNum, cardEl) {
+      playTone('click');
+      const inner = cardEl.querySelector('.flip-inner');
+      inner.classList.toggle('rotate-y-180');
+      state.flipsDone.add(cardNum);
+      document.getElementById('flipCountBadge').innerText = `Balik Kartu (${state.flipsDone.size}/3)`;
+      if (state.flipsDone.size >= 3) {
+        markTaskDone(1);
+      }
+    }
+
+    // Unit 2: Tabs Switcher
+    function switchTab(tabId) {
+      playTone('click');
+      document.querySelectorAll('.tab-pane').forEach(el => el.classList.add('hidden'));
+      document.getElementById(tabId).classList.remove('hidden');
+
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.className = "tab-btn px-4 py-2 rounded-full text-xs font-extrabold transition bg-spike-gray text-spike-black hover:bg-[#EAEAEA] flex items-center gap-1.5";
+      });
+      document.getElementById(`btn-${tabId}`).className = "tab-btn px-4 py-2 rounded-full text-xs font-extrabold transition bg-spike-blue text-white shadow-sm flex items-center gap-1.5";
+
+      state.tabsViewed.add(tabId);
+      document.getElementById('tabCountBadge').innerText = `Tab Dilihat (${state.tabsViewed.size}/3)`;
+      if (state.tabsViewed.size >= 3) {
+        markTaskDone(2);
+      }
+    }
+
+    // Unit 3: Fishbone & 5-Whys Stepper
+    const fishTips = {
+      'people': "👥 <strong>Manpower:</strong> Apakah staf memahami cara kerja sistem baru? Apakah ada kelelahan operasional atau turnover tinggi?",
+      'method': "📋 <strong>Method:</strong> Apakah ada SOP resmi yang mengatur serah terima data antar cabang? Apakah ada checklist verifikasi?",
+      'machine': "⚙️ <strong>Machine:</strong> Apakah server aplikasi stabil? Apakah sistem ERP memiliki validasi otomatis SKU?",
+      'material': "📦 <strong>Material:</strong> Apakah format input spreadsheet cabang konsisten? Apakah data mentah lengkap sebelum diproses?"
+    };
+
+    function selectFishPin(pinKey) {
+      playTone('click');
+      document.getElementById('fishInfoBox').innerHTML = `<span class="material-symbols-outlined text-spike-blue text-lg">info</span><span>${fishTips[pinKey]}</span>`;
+    }
+
+    const whySteps = [
+      "<strong>Kenapa 1:</strong> Mengapa laporan bulanan terlambat diserahkan? ➔ <em>Data penjualan dari kantor cabang belum direkap.</em>",
+      "<strong>Kenapa 2:</strong> Mengapa data cabang belum direkap? ➔ <em>Format spreadsheet yang dikirim tiap cabang berbeda-beda.</em>",
+      "<strong>Kenapa 3:</strong> Mengapa formatnya berbeda-beda? ➔ <em>Tidak ada template standar satu pintu di cloud.</em>",
+      "<strong>Kenapa 4:</strong> Mengapa tidak ada template standar? ➔ <em>Belum pernah ada konsensus SOP pelaporan antar cabang.</em>",
+      "🎯 <strong>Kenapa 5 (ROOT CAUSE):</strong> <em>Ketiadaan standarisasi sistem pelaporan satu pintu terpusat!</em> Inilah akar masalah yang harus dibangun solusinya."
+    ];
+
+    function nextWhyStep() {
+      if (state.currentWhyStep < 5) {
+        state.currentWhyStep++;
+        playTone('click');
+        updateWhyUI();
+        if (state.currentWhyStep === 5) {
+          markTaskDone(3);
+        }
+      }
+    }
+
+    function prevWhyStep() {
+      if (state.currentWhyStep > 1) {
+        state.currentWhyStep--;
+        playTone('click');
+        updateWhyUI();
+      }
+    }
+
+    function updateWhyUI() {
+      document.getElementById('whyStepBadge').innerText = `Mengapa ke-${state.currentWhyStep} / 5`;
+      document.getElementById('whyStepperContent').innerHTML = whySteps[state.currentWhyStep - 1];
+      document.getElementById('btnPrevWhy').disabled = (state.currentWhyStep === 1);
+      document.getElementById('btnNextWhy').disabled = (state.currentWhyStep === 5);
+      if (state.currentWhyStep === 5) {
+        document.getElementById('btnNextWhy').innerHTML = `<span>✓ Akar Masalah Ditemukan</span>`;
+      } else {
+        document.getElementById('btnNextWhy').innerHTML = `<span>Gali 'Mengapa' Berikutnya</span><span class="material-symbols-outlined text-sm">arrow_forward</span>`;
+      }
+    }
+
+    // Unit 4: Drag and Drop
+    let draggedType = null;
+
+    function handleDragStart(e, type) {
+      draggedType = type;
+      e.dataTransfer.setData('text', type);
+    }
+
+    function handleDragOver(e) {
+      e.preventDefault();
+      e.currentTarget.classList.add('drag-over');
+    }
+
+    function handleDragLeave(e) {
+      e.currentTarget.classList.remove('drag-over');
+    }
+
+    function handleDrop(e, expectedType, targetId) {
+      e.preventDefault();
+      e.currentTarget.classList.remove('drag-over');
+      const dropped = draggedType || e.dataTransfer.getData('text');
+      const targetEl = document.getElementById(targetId);
+
+      if (dropped === expectedType) {
+        playTone('success');
+        state.dragMatches[expectedType] = true;
+        const chip = document.getElementById(`chip-${dropped}`);
+        if (chip) chip.style.display = 'none';
+
+        targetEl.innerHTML = `<span class="px-3 py-1 rounded-full bg-emerald-600 text-white font-extrabold text-xs flex items-center gap-1"><span class="material-symbols-outlined text-sm">check</span> TEPAT: ${chip ? chip.innerText.trim() : ''}</span>`;
+        targetEl.className = "h-9 min-w-[200px] rounded-full border border-emerald-300 bg-emerald-50 flex items-center justify-center";
+      } else {
+        playTone('error');
+        targetEl.innerHTML = `<span class="text-spike-crimson font-extrabold text-xs flex items-center gap-1"><span class="material-symbols-outlined text-sm">close</span> Kurang Tepat, coba lagi</span>`;
+        setTimeout(() => {
+          if (!state.dragMatches[expectedType]) {
+            targetEl.innerHTML = "Letakkan label di sini";
+            targetEl.className = "h-9 min-w-[200px] rounded-full border border-[#DDDDDD] bg-spike-gray flex items-center justify-center text-[11px] text-[#888888] font-bold";
+          }
+        }, 1200);
+      }
+
+      const matchCount = Object.keys(state.dragMatches).length;
+      document.getElementById('dragScoreBadge').innerText = `Terjawab (${matchCount}/3)`;
+      if (matchCount >= 3) {
+        document.getElementById('dragFeedbackBox').classList.remove('hidden');
+        markTaskDone(4);
+      }
+    }
+
+    // Unit 5: Matrix Simulator
+    const quadInfo = {
+      1: "⭐ <strong>Kuadran I (Quick Wins):</strong> Berikan prioritas pertama. Ini membangun moral tim dan membuktikan bahwa kepemimpinan Anda responsif terhadap perbaikan cepat.",
+      2: "🚀 <strong>Kuadran II (Major Projects):</strong> Bagian terpenting dari pertumbuhan jangka panjang. Alokasikan budget dan tim khusus agar tidak terdistraksi masalah harian.",
+      3: "⏳ <strong>Kuadran III (Fill-ins):</strong> Jangan biarkan tim senior menghabiskan waktu di sini. Manfaatkan tools otomatisasi atau no-code untuk menyelesaikan tugas kecil ini.",
+      4: "🚫 <strong>Kuadran IV (Thankless Tasks):</strong> Berani berkata TIDAK. Sebagai digital leader, menolak inisiatif yang tidak bernilai tambah adalah bentuk perlindungan kapasitas tim."
+    };
+
+    function selectMatrixQuad(num) {
+      playTone('click');
+      state.matrixQuads.add(num);
+      document.getElementById('matrixDetailBox').innerHTML = `<span class="material-symbols-outlined text-spike-blue text-lg">info</span><span>${quadInfo[num]}</span>`;
+      document.getElementById('matrixCountBadge').innerText = `Kuadran (${state.matrixQuads.size}/4)`;
+      if (state.matrixQuads.size >= 4) {
+        markTaskDone(5);
+      }
+    }
+
+    // Unit 6: Process Stepper
+    const phaseInfo = {
+      1: "📌 <strong>Fase 1 (Containment):</strong> Kecepatan adalah kunci. Pastikan stakeholder dan klien terlindungi terlebih dahulu sebelum memulai investigasi menyeluruh.",
+      2: "📌 <strong>Fase 2 (Corrective):</strong> Perbaiki proses dasar. Periksa apakah SOP sudah jelas, berikan upskilling jika ada gap keterampilan staf.",
+      3: "📌 <strong>Fase 3 (Preventive):</strong> Jadikan pembelajaran permanen. Terapkan automated testing dan bagikan temuan ke knowledge base agar squad lain tidak mengalami hal yang sama."
+    };
+
+    function selectProcPhase(num) {
+      playTone('click');
+      state.procPhases.add(num);
+      document.getElementById('phaseDetailBox').innerHTML = `<span class="material-symbols-outlined text-spike-blue text-lg">shield</span><span>${phaseInfo[num]}</span>`;
+      document.getElementById('procStepBadge').innerText = `Fase ${num} / 3`;
+      if (state.procPhases.size >= 3) {
+        markTaskDone(6);
+      }
+    }
+
+    // Unit 7: PDCA Node
+    const pdcaInfo = {
+      'plan': "📊 <strong>Plan:</strong> Susun hipotesis berbasis data kuantitatif, bukan asumsi subjektif.",
+      'do': "⚡ <strong>Do:</strong> Eksekusi dalam batas waktu sprint 1-2 minggu agar cepat mendapat feedback pasar.",
+      'check': "📈 <strong>Check:</strong> Analisis metrik telemetri nyata, bandingkan dengan baseline awal.",
+      'act': "🔄 <strong>Act:</strong> Skalakan solusi yang berhasil, segera hentikan eksperimen yang gagal."
+    };
+
+    function selectPdcaNode(nodeKey) {
+      playTone('click');
+      state.pdcaNodes.add(nodeKey);
+      document.getElementById('pdcaDetailBox').innerHTML = `<span class="material-symbols-outlined text-spike-blue text-lg">autorenew</span><span>${pdcaInfo[nodeKey]}</span>`;
+      document.getElementById('pdcaCountBadge').innerText = `Node PDCA (${state.pdcaNodes.size}/4)`;
+      if (state.pdcaNodes.size >= 4) {
+        markTaskDone(7);
+      }
+    }
+
+    // Unit 8: Scenario Response
+    function selectScenarioResponse(choice) {
+      const fb = document.getElementById('scenarioFeedback');
+      fb.classList.remove('hidden');
+
+      if (choice === 'A') {
+        playTone('success');
+        document.getElementById('teamMoodMeter').innerText = "Tenang & Fokus (90%)";
+        document.getElementById('teamMoodMeter').className = "text-xs font-mono font-bold text-emerald-800 bg-emerald-50 px-3 py-0.5 rounded-full border border-emerald-200";
+        fb.className = "p-4 rounded-2xl text-xs leading-relaxed bg-emerald-50 border border-emerald-300 text-emerald-950";
+        fb.innerHTML = "🏆 <strong>Keputusan Sempurna (+20 Poin):</strong> Anda menenangkan tim, mengisolasi dampak ke klien (Containment), dan menggunakan data log error untuk memecahkan akar masalah bersama tanpa saling menyalahkan.";
+        markTaskDone(8);
+      } else if (choice === 'B') {
+        playTone('error');
+        document.getElementById('teamMoodMeter').innerText = "Panik Meluas (20%)";
+        document.getElementById('teamMoodMeter').className = "text-xs font-mono font-bold text-spike-crimson bg-spike-crimson-light px-3 py-0.5 rounded-full border border-spike-crimson-border";
+        fb.className = "p-4 rounded-2xl text-xs leading-relaxed bg-spike-crimson-light border border-spike-crimson-border text-spike-black";
+        fb.innerHTML = "❌ <strong>Jebakan Action Bias (-15 Poin):</strong> Kepanikan Anda membuat tim tertekan dan ketakutan melapor. Rollback tanpa analisis sering kali menyebabkan downtime lebih panjang.";
+      } else {
+        playTone('error');
+        document.getElementById('teamMoodMeter').innerText = "Bingung & Pasif (30%)";
+        document.getElementById('teamMoodMeter').className = "text-xs font-mono font-bold text-amber-800 bg-amber-50 px-3 py-0.5 rounded-full border border-amber-200";
+        fb.className = "p-4 rounded-2xl text-xs leading-relaxed bg-amber-50 border border-amber-200 text-amber-950";
+        fb.innerHTML = "⚠️ <strong>Analysis Paralysis (-20 Poin):</strong> Menunggu berjam-jam tanpa melakukan containment membuat kerugian klien enterprise semakin membesar.";
+      }
+    }
+
+    // Unit 9: Quiz Evaluation & SAP LMS SCORM Pass Event
+    function submitQuizOption(choice) {
+      const fb = document.getElementById('quizFeedbackBox');
+      fb.classList.remove('hidden');
+
+      if (choice === 'D') {
+        playTone('fanfare');
+        if (typeof confetti === 'function') {
+          confetti({ particleCount: 90, spread: 80, origin: { y: 0.6 } });
+        }
+        fb.className = "p-4 rounded-2xl text-xs leading-relaxed bg-emerald-50 border border-emerald-300 text-emerald-950 space-y-1";
+        fb.innerHTML = "🎉 <strong>Benar Mutlak! (Skor: 100/100 - LULUS):</strong><br>Opsi D menggabungkan data kuantitatif, wawasan kualitatif dari pengguna churn, hipotesis akar masalah, serta validasi A/B testing berisiko rendah sebelum rilis massal.";
+        state.quizPassed = true;
+        markTaskDone(9);
+        
+        // Push 100 score & Passed status to SAP SuccessFactors
+        scorm.saveProgress(9, 100, true);
+      } else {
+        playTone('error');
+        fb.className = "p-4 rounded-2xl text-xs leading-relaxed bg-spike-crimson-light border border-spike-crimson-border text-spike-black space-y-1";
+        fb.innerHTML = "❌ <strong>Kurang Tepat:</strong> Opsi ini mengabaikan prinsip mitigasi risiko dan pengujian berbasis data. Silakan evaluasi kembali dan pilih opsi D.";
+      }
+    }
+
+    // Unit 10: Toolkit Download Action
+    function downloadCanvasToolkit() {
+      playTone('success');
+      const text = `PROBLEM SOLVING & DECISION MAKING CANVAS\n\n1. PERNYATAAN MASALAH (5W2H):\n[Isi pernyataan masalah yang faktual, terukur, dan netral]\n\n2. INVESTIGASI 5-WHYS:\n- Mengapa 1:\n- Mengapa 2:\n- Mengapa 3:\n- Mengapa 4:\n- Mengapa 5 (Root Cause):\n\n3. PRIORITAS SOLUSI (IMPACT VS EFFORT):\n- Quick Wins:\n- Major Projects:\n\n4. RENCANA AKSI KOREKTIF:\n- Containment (Jam):\n- Corrective (Minggu):\n- Preventive (Sistemik):\n\n5. SIKLUS SPRINT PDCA:\n- Hipotesis Plan:\n- Do (Sprint 1-2 minggu):\n- Check (Metrik Telemetri):\n- Act (Adapt / Persevere):`;
+      const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'Problem_Solving_Canvas_Template.txt';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+
+    // Initialize when page loads
+    window.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+</html>

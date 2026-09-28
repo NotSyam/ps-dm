@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<manifest identifier="PSDM_DLDP_COURSE_01" version="1.2"
+          xmlns="http://www.imsproject.org/xsd/imscp_rootv1p1p2"
+          xmlns:adlcp="http://www.adlnet.org/xsd/adlcp_rootv1p2"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://www.imsproject.org/xsd/imscp_rootv1p1p2 imscp_rootv1p1p2.xsd
+                              http://www.imsglobal.org/xsd/imsmd_rootv1p2p1 imsmd_rootv1p2p1.xsd
+                              http://www.adlnet.org/xsd/adlcp_rootv1p2 adlcp_rootv1p2.xsd">
+  <metadata>
+    <schema>ADL SCORM</schema>
+    <schemaversion>1.2</schemaversion>
+  </metadata>
+  <organizations default="PSDM_ORG">
+    <organization identifier="PSDM_ORG">
+      <title>Problem Solving &amp; Decision Making - Digital Leadership Program</title>
+      <item identifier="ITEM_PSDM_01" identifierref="RES_PSDM_01">
+        <title>Modul Interaktif Problem Solving &amp; Decision Making</title>
+        <adlcp:masteryscore>80</adlcp:masteryscore>
+      </item>
+    </organization>
+  </organizations>
+  <resources>
+    <resource identifier="RES_PSDM_01" type="webcontent" adlcp:scormtype="sco" href="index.html">
+      <file href="index.html"/>
+      <file href="audio/unit_00.mp3"/>
+      <file href="audio/unit_01.mp3"/>
+      <file href="audio/unit_02.mp3"/>
+      <file href="audio/unit_03.mp3"/>
+      <file href="audio/unit_04.mp3"/>
+      <file href="audio/unit_05.mp3"/>
+      <file href="audio/unit_06.mp3"/>
+      <file href="audio/unit_07.mp3"/>
+      <file href="audio/unit_08.mp3"/>
+      <file href="audio/unit_09.mp3"/>
+      <file href="audio/unit_10.mp3"/>
+    </resource>
+  </resources>
+</manifest>
